@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1018703142299",
+    "project_id": "mobile-app-2dabe",
+    "storage_bucket": "mobile-app-2dabe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018703142299:android:5db6178a151198fe41553e",
+        "android_client_info": {
+          "package_name": "com.empirereportoffline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018703142299-g4i4p33hkagccmup46p0r8696jeqd0f4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfhu4WioDKXIjCdlbGLdIfeBKedS5cpy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018703142299-g4i4p33hkagccmup46p0r8696jeqd0f4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1018703142299-la9t2rpnjr8h8pc5a1sa6cggmiadjklk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.perchcreek.empirereportapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
