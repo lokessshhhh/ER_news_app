@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CustomColors} from '../../theme/CustomColors';
 import Loader from '../../component/Loader';
 import NetInfo from '@react-native-community/netinfo';
-import {ApiBaseUrl, Deeplink} from '../../utils/UtilsLinks';
+import {ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import Share from 'react-native-share';
 
@@ -98,7 +98,7 @@ class NycLongIsland extends Component {
           <Image
             resizeMode="contain"
             style={HomeScreenStyles.topHeadlineLogo}
-            source={Img.toplogo}
+            source={Img.nyclong}
           />
 
           <View style={{marginLeft: wp(2.5)}}>
@@ -125,7 +125,7 @@ class NycLongIsland extends Component {
                             link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title.replace('&#8230','…').replace('&#8217',"’").replace('&#8221',"”")}
+                        textUrl={item.enter_title.replace('&#8230;','…').replace('&#8217;',"’").replace('&#8221;',"”").replace('&#8211;',"–")}
                       />
                     )
                   ) : null

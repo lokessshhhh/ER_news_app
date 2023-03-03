@@ -12,7 +12,7 @@ import RenderLists from '../../component/RenderLists';
 import Loader from '../../component/Loader';
 import NetInfo from '@react-native-community/netinfo';
 import Share from 'react-native-share';
-import {ApiBaseUrl, Deeplink} from '../../utils/UtilsLinks';
+import {ApiBaseUrl, Deeplink} from '../../utils/Config';
 
 class NyState extends Component {
   constructor(props) {
@@ -94,8 +94,8 @@ class NyState extends Component {
         <ScrollView>
           <Image
             resizeMode="contain"
-            style={HomeScreenStyles.topHeadlineLogo}
-            source={Img.toplogo}
+            style={[HomeScreenStyles.topHeadlineLogo,{height:hp(5),width:wp(45),margin:hp(1)}]}
+            source={Img.nystate}
           />
           <View style={{marginLeft: wp(2.5)}}>
             {this.state.IsLoading === true ? (
@@ -121,7 +121,7 @@ class NyState extends Component {
                             link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title.replace('&#8230','…').replace('&#8217',"’").replace('&#8221',"”")}
+                        textUrl={item.enter_title.replace('&#8230;','…').replace('&#8217;',"’").replace('&#8221;',"”").replace('&#8211;',"–")}
                       />
                     )
                   ) : null

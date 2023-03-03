@@ -8,10 +8,9 @@ import Share from 'react-native-share';
 import NetInfo from '@react-native-community/netinfo';
 import {openDatabase} from 'react-native-sqlite-storage';
 
-
 const db = openDatabase({name: 'offlineMode'});
 
- const Tables1 = [
+const Tables1 = [
   'topHeadlines',
   'NYstate',
   'NYCLongIsland',
@@ -31,6 +30,7 @@ class DetailedHeadline extends Component {
   componentDidMount() {
     this.getNetInfo();
     this.getOfflineData();
+    console.log(this.props.route, '===route====');
   }
 
   getOfflineData = () => {

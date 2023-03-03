@@ -12,12 +12,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CustomColors} from '../../theme/CustomColors';
 import Loader from '../../component/Loader';
 import NetInfo from '@react-native-community/netinfo';
-import {ApiBaseUrl, Deeplink} from '../../utils/UtilsLinks';
+import {ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import Share from 'react-native-share';
 
 class BreakingState extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -97,8 +96,8 @@ class BreakingState extends Component {
         <ScrollView>
           <Image
             resizeMode="contain"
-            style={HomeScreenStyles.topHeadlineLogo}
-            source={Img.toplogo}
+            style={[HomeScreenStyles.topHeadlineLogo]}
+            source={Img.breaking}
           />
           <View style={{marginLeft: wp(2.5)}}>
             {this.state.IsLoading === true ? (
@@ -124,7 +123,11 @@ class BreakingState extends Component {
                             link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title.replace('&#8230','…').replace('&#8217',"’").replace('&#8221',"”")}
+                        textUrl={item.enter_title
+                          .replace('&#8230;', '…')
+                          .replace('&#8217;', '’')
+                          .replace('&#8221;', '”')
+                          .replace('&#8211;', '–')}
                       />
                     )
                   ) : null

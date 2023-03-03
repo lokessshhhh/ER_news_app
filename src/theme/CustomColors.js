@@ -1,5 +1,6 @@
 export const CustomColors = {
-    
+    cardbg:'#F9F9FA',
+    cardtext:'#666666',
     primarybg:'#EFEBD8',
     white: '#FFFFFF',
     black: '#000000',

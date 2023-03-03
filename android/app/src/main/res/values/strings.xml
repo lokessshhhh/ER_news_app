@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EmpireReport</string>
+    <string name="default_notification_channel_id">chennel-id-1</string>
 </resources>

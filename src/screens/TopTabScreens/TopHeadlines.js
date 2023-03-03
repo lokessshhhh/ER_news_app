@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../component/Loader';
 import NetInfo from '@react-native-community/netinfo';
 import Share from 'react-native-share';
-import {ApiBaseUrl, Deeplink} from '../../utils/UtilsLinks';
+import {ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import {openDatabase} from 'react-native-sqlite-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
@@ -35,6 +35,7 @@ const Tables = [
 const requests = urls.map(url => axios.get(url));
 
 class TopHeadlines extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -294,7 +295,7 @@ class TopHeadlines extends Component {
           <Image
             resizeMode="contain"
             style={HomeScreenStyles.topHeadlineLogo}
-            source={Img.toplogo}
+            source={Img.topheadline}
           />
           <View style={{marginLeft: wp(2.5)}}>
             {this.state.IsLoading === true ? (
@@ -317,10 +318,10 @@ class TopHeadlines extends Component {
                         }}
                         onPressUrl={() => {
                           this.props.navigation.navigate('DetailedHeadline', {
-                            link: item.enter_url
+                            link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title.replace('&#8230','…').replace('&#8217',"’").replace('&#8221',"”").replace(';',"")}
+                        textUrl={item.enter_title.replace('&#8230;','…').replace('&#8217;',"’").replace('&#8221;',"”").replace('&#8211;',"–")}
                       />
                     )
                   ) : null
