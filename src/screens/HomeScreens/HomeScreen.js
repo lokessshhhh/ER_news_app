@@ -3,12 +3,9 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   Image,
   TouchableOpacity,
   Modal,
-  Pressable,
-  TextInput,
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
@@ -66,7 +63,7 @@ class HomeScreen extends Component {
 
   GetOnlineData = async () => {
     await axios
-      .get(`${ApiBaseUrl}pages?per_page=20`)
+      .get(`${ApiBaseUrl}pages?per_page=20&_embed`)
       .then(async res => {
         await AsyncStorage.removeItem('OrignalContent');
         this.setState({HeadlinesList: res.data});
@@ -138,22 +135,24 @@ class HomeScreen extends Component {
               >
                 <View style={{marginLeft: wp(2.5)}}>
                   <TouchableOpacity
-                  onPress={()=>{
-                    this.props.navigation.navigate('DetailedHeadline', {
-                      link: item.content.rendered})
-                  }}
-                  >
-                  <Text
-                    style={{
-                      color: CustomColors.black,
-                      fontSize: hp(2.5),
-                      textDecorationLine: 'underline',
+                    onPress={() => {
+                      this.props.navigation.navigate('OriginalContent', {
+                        link: item.link,
+                        html:item.content.rendered
+                      });
                     }}
                   >
-                    {item.title.rendered}
-                  </Text>
+                    <Text
+                      style={{
+                        color: CustomColors.black,
+                        fontSize: hp(2.5),
+                        textDecorationLine: 'underline',
+                      }}
+                    >
+                      {item.title.rendered}
+                    </Text>
                   </TouchableOpacity>
-                  
+
                   <Text
                     numberOfLines={3}
                     style={{
@@ -189,7 +188,7 @@ class HomeScreen extends Component {
                         fontWeight: 'bold',
                       }}
                     >
-                      auther name | {moment(item.date).format('MMMM DD, YYYY')}
+                      {item._embedded.author[0].name} | {moment(item.date).format('MMMM DD, YYYY')}
                     </Text>
                   </View>
                 </View>

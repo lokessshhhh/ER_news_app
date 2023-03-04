@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {HomeScreenStyles} from '../HomeScreens/HomeScreenStyles';
+import {HomeScreenStyles} from './HomeScreenStyles';
 import {Img} from '../../theme/Img';
 import WebView from 'react-native-webview';
 import MainHeader from '../../component/MainHeader';
@@ -8,16 +8,9 @@ import Share from 'react-native-share';
 import NetInfo from '@react-native-community/netinfo';
 import {openDatabase} from 'react-native-sqlite-storage';
 
-const db = openDatabase({name: 'offlineMode'});
 
-const Tables1 = [
-  'topHeadlines',
-  'NYstate',
-  'NYCLongIsland',
-  'breakingStatewide',
-];
+class OriginalContent extends Component {
 
-class DetailedHeadline extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,29 +21,7 @@ class DetailedHeadline extends Component {
 
   componentDidMount() {
     this.getNetInfo();
-    this.getOfflineData();
-    console.log(this.props.route, '===route====');
   }
-
-  getOfflineData = () => {
-    Tables1.map(item =>
-      db.transaction(tx => {
-        tx.executeSql(`SELECT * FROM ${item}`, [], (tx, results) => {
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i)
-            temp.push(results.rows.item(i));
-          let htmlData = temp.filter(
-            item => item.key === this.props.route.params.link,
-          );
-          htmlData.map(item => {
-            this.setState({
-              htmlTags: item.data,
-            });
-          });
-        });
-      }),
-    );
-  };
 
   getNetInfo = () => {
     NetInfo.addEventListener(state => {
@@ -97,7 +68,7 @@ class DetailedHeadline extends Component {
           {this.state.isOnline ? (
             <WebView source={{uri: this.props.route.params.link}} />
           ) : (
-            <WebView source={{html: this.state.htmlTags}} />
+            <WebView source={{html: this.props.route.params.html}} />
           )}
         </View>
       </View>
@@ -105,4 +76,4 @@ class DetailedHeadline extends Component {
   }
 }
 
-export default DetailedHeadline;
+export default OriginalContent;

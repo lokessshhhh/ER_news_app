@@ -35,7 +35,6 @@ const Tables = [
 const requests = urls.map(url => axios.get(url));
 
 class TopHeadlines extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -43,7 +42,7 @@ class TopHeadlines extends Component {
       IsLoading: true,
       IsOnline: false,
     };
-  };
+  }
 
   // handleDynamicLink = link => {
   //   // Handle dynamic link inside your own application
@@ -63,8 +62,6 @@ class TopHeadlines extends Component {
         : console.log('No link found')
       : null;
     this.getNetInfo();
-    this.InitialiseDB();
-    this.SaveAllDataOffline();
     this.buildLink();
   }
 
@@ -84,7 +81,7 @@ class TopHeadlines extends Component {
   };
 
   InitialiseDB = () => {
-    Tables.map(item =>
+    Tables.map(item => 
       db.transaction(txn => {
         txn.executeSql(
           `SELECT name FROM sqlite_master WHERE type='table' AND name='${item}'`,
@@ -264,6 +261,8 @@ class TopHeadlines extends Component {
           IsOnline: true,
         });
         this.GetOnlineData();
+        this.InitialiseDB();
+        this.SaveAllDataOffline();
       } else {
         this.setState({
           IsOnline: false,
@@ -275,11 +274,13 @@ class TopHeadlines extends Component {
   };
 
   ShareApp = async Url => {
+    
     const shareOptions = {
       title: 'Share file',
       failOnCancel: false,
       urls: [`${Deeplink}${Url}`],
     };
+
     try {
       const ShareResponse = await Share.open(shareOptions);
       console.log('Result =>', ShareResponse);
@@ -321,7 +322,11 @@ class TopHeadlines extends Component {
                             link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title.replace('&#8230;','…').replace('&#8217;',"’").replace('&#8221;',"”").replace('&#8211;',"–")}
+                        textUrl={item.enter_title
+                          .replace('&#8230;', '…')
+                          .replace('&#8217;', '’')
+                          .replace('&#8221;', '”')
+                          .replace('&#8211;', '–')}
                       />
                     )
                   ) : null

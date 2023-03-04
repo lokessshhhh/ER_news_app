@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreens/HomeScreen';
 import TopHeadlines from '../screens/TopTabScreens/TopHeadlines';
 import DetailedHeadline from '../screens/TopTabScreens/DetailedHeadline';
+import OriginalContent from '../screens/HomeScreens/OriginalContent';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,10 @@ const screens = [
   {
     name: 'DetailedHeadline',
     component: DetailedHeadline,
+  },
+  {
+    name: 'OriginalContent',
+    component: OriginalContent,
   },
 ];
 
