@@ -6,6 +6,11 @@ import WebView from 'react-native-webview';
 import MainHeader from '../../component/MainHeader';
 import Share from 'react-native-share';
 import NetInfo from '@react-native-community/netinfo';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from '../../theme/layout';
+import Loader from '../../component/Loader';
 import {openDatabase} from 'react-native-sqlite-storage';
 
 const db = openDatabase({name: 'offlineMode'});
@@ -23,6 +28,7 @@ class DetailedHeadline extends Component {
     this.state = {
       isOnline: false,
       htmlTags: '',
+      isLoading: false,
     };
   }
 
@@ -94,11 +100,39 @@ class DetailedHeadline extends Component {
           ImgRight={Img.share}
         />
         <View style={{flex: 1}}>
-          {this.state.isOnline ? (
-            <WebView source={{uri: this.props.route.params.link}} />
+          {!this.state.isOnline ? (
+            <WebView
+              onLoadEnd={() => {
+                setTimeout(() => {
+                  this.setState({
+                    isLoading: true,
+                  });
+                }, 2000);
+              }}
+              source={{html: this.state.htmlTags}}
+            />
           ) : (
-            <WebView source={{html: this.state.htmlTags}} />
+            <WebView
+              onLoadEnd={() => {
+                setTimeout(() => {
+                  this.setState({
+                    isLoading: true,
+                  });
+                }, 1000);
+              }}
+              source={{uri: this.props.route.params.link}}
+            />
           )}
+          {this.state.isLoading === false ? (
+            <View style={{position: 'absolute', top: hp(18), left: wp(13)}}>
+              <View>
+                <Loader />
+                <Text style={{fontSize: hp(3.5), textAlign: 'center'}}>
+                  Please wait while data is loading
+                </Text>
+              </View>
+            </View>
+          ) : null}
         </View>
       </View>
     );

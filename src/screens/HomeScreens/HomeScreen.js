@@ -6,7 +6,6 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-  TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
 import {CustomColors} from '../../theme/CustomColors';
@@ -72,6 +71,7 @@ class HomeScreen extends Component {
         this.setState({
           IsLoading: false,
         });
+        console.log(res.data,'===res===');
       })
       .catch(err => {
         console.log(err);
@@ -97,6 +97,7 @@ class HomeScreen extends Component {
         this.setState({
           IsOnline: true,
         });
+        this.GetOfflineData();
       }
     });
   };
@@ -149,7 +150,16 @@ class HomeScreen extends Component {
                         textDecorationLine: 'underline',
                       }}
                     >
-                      {item.title.rendered}
+                      {
+                      item.title.rendered
+                      .replace(/<[^>]+>/g, '')
+                      .replace('&#8230;', '…')
+                      .replace('&#8217;', '’')
+                      .replace('&#8221;', '”')
+                      .replace('&#8211;', '–')
+                      .replace('&#8220;', '“')
+                      .replace('&#038;', '&')
+                      .replace('&amp;', '&')}
                     </Text>
                   </TouchableOpacity>
 
@@ -167,7 +177,10 @@ class HomeScreen extends Component {
                       .replace('&#8217;', '’')
                       .replace('&#8221;', '”')
                       .replace('&#8211;', '–')
-                      .replace('&#8220;', '“')}
+                      .replace('&#8220;', '“')
+                      .replace('&#038;', '&')
+                      .replace('&amp;', '&')
+                      }
                     {'...'}
                   </Text>
 
@@ -446,11 +459,7 @@ class HomeScreen extends Component {
               transparent={true}
               visible={this.state.IsOnline}
             >
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  this.setState({IsOnline: false});
-                }}
-              >
+
                 <View
                   style={{
                     flex: 1,
@@ -467,18 +476,9 @@ class HomeScreen extends Component {
                         marginBottom: hp(2.5),
                       }}
                     >
-                      {Strings.offlinealert1}
+                      {Strings.offlinealert}
                     </Text>
-                    <Text
-                      style={{
-                        alignSelf: 'flex-start',
-                        color: CustomColors.black,
-                        marginLeft: wp(-5),
-                        marginBottom: hp(2),
-                      }}
-                    >
-                      {Strings.offlinealert2}
-                    </Text>
+                   
                     <GreyButton
                       onPress={() => {
                         this.setState({IsOnline: false});
@@ -487,7 +487,6 @@ class HomeScreen extends Component {
                     />
                   </View>
                 </View>
-              </TouchableWithoutFeedback>
             </Modal>
           </View>
         </View>

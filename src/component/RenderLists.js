@@ -7,6 +7,7 @@ import {
   heightPercentageToDP as hp,
 } from '../theme/layout';
 import {CustomColors} from '../theme/CustomColors';
+import { POSTER_INITIAL_ROUTE } from '../utils/Config';
 
 const RenderLists = ({
   isHorizontalLine,
@@ -34,10 +35,10 @@ const RenderLists = ({
       >
         {isUploadImg === '' || isUploadImg === null ? null : (
           <Image
-            resizeMode="stretch"
+            resizeMode="contain"
             style={HomeScreenStyles.bannerImg}
             source={{
-              uri: `http://104.152.168.42/~healthca/staging-empire-reportny/?p=${imgSource}`,
+              uri: `${POSTER_INITIAL_ROUTE}${imgSource}`,
             }}
           />
         )}

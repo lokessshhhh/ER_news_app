@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
 import Route from './src/routestack/Route';
 import DeviceInfo from 'react-native-device-info';
 import axios from 'axios';
@@ -12,7 +11,9 @@ import {GetFCMtoken} from './src/utils/notificationHelper';
 import {FCM_API_KEY, WP_JSON_URL} from './src/utils/Config';
 
 class App extends Component {
+
   getId = async () => {
+    
     let fcmtoken = await AsyncStorage.getItem('fcmToken');
 
     DeviceInfo.getUniqueId()

@@ -6,16 +6,19 @@ import WebView from 'react-native-webview';
 import MainHeader from '../../component/MainHeader';
 import Share from 'react-native-share';
 import NetInfo from '@react-native-community/netinfo';
-import {openDatabase} from 'react-native-sqlite-storage';
-
+import Loader from '../../component/Loader';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from '../../theme/layout';
 
 class OriginalContent extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       isOnline: false,
       htmlTags: '',
+      isLoading: false,
     };
   }
 
@@ -66,10 +69,33 @@ class OriginalContent extends Component {
         />
         <View style={{flex: 1}}>
           {this.state.isOnline ? (
-            <WebView source={{uri: this.props.route.params.link}} />
+            <WebView
+              onLoadEnd={() => {
+                setTimeout(() => {
+                  this.setState({
+                    isLoading: true,
+                  });
+                }, 1000);
+              }}
+              source={{uri: this.props.route.params.link}}
+            />
           ) : (
-            <WebView source={{html: this.props.route.params.html}} />
+            <WebView
+              onLoadEnd={() => {
+                setTimeout(() => {
+                  this.setState({
+                    isLoading: true,
+                  });
+                }, 1000);
+              }}
+              source={{html: this.props.route.params.html}}
+            />
           )}
+          {this.state.isLoading === false ? (
+            <View style={{position: 'absolute', top: hp(20), left: wp(45)}}>
+              <Loader />
+            </View>
+          ) : null}
         </View>
       </View>
     );

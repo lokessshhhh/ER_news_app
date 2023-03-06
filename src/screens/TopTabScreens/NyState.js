@@ -94,7 +94,10 @@ class NyState extends Component {
         <ScrollView>
           <Image
             resizeMode="contain"
-            style={[HomeScreenStyles.topHeadlineLogo,{height:hp(5),width:wp(45),margin:hp(1)}]}
+            style={[
+              HomeScreenStyles.topHeadlineLogo,
+              {height: hp(5), width: wp(45), margin: hp(1)},
+            ]}
             source={Img.nystate}
           />
           <View style={{marginLeft: wp(2.5)}}>
@@ -121,7 +124,15 @@ class NyState extends Component {
                             link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title.replace('&#8230;','…').replace('&#8217;',"’").replace('&#8221;',"”").replace('&#8211;',"–")}
+                        textUrl={item.enter_title
+                          .replace(/<[^>]+>/g, '')
+                          .replace('&#8230;', '…')
+                          .replace('&#8217;', '’')
+                          .replace('&#8221;', '”')
+                          .replace('&#8211;', '–')
+                          .replace('&#8220;', '“')
+                          .replace('&#038;', '&')
+                          .replace('&amp;', '&')}
                       />
                     )
                   ) : null
