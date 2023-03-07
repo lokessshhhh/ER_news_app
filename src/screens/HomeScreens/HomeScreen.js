@@ -28,8 +28,11 @@ import {ApiBaseUrl} from '../../utils/Config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TopHeadlines from '../TopTabScreens/TopHeadlines';
+import {openDatabase} from 'react-native-sqlite-storage';
 
 const Tab = createMaterialTopTabNavigator();
+
+const db = openDatabase({name: 'offlineMode'});
 
 const FooterButtonArray = [
   {
@@ -60,18 +63,51 @@ class HomeScreen extends Component {
     this.getNetInfo();
   }
 
+  InitialiseDB = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='OrignalContent'`,
+        [],
+        (tx, res) => {
+          console.log('item:', res.rows.length);
+          if (res.rows.length == 0) {
+            txn.executeSql(
+              `DROP TABLE IF EXISTS OrignalContent`,
+              [],
+              (tx, results) => {
+                if (results && results.rows && results.rows._array) {
+                  console.log(JSON.stringify(results.rows._array));
+                } else {
+                  console.log('no results');
+                }
+              },
+              (tx, error) => {
+                console.log(error);
+              },
+            );
+            txn.executeSql(
+              `CREATE TABLE IF NOT EXISTS OrignalContent(user_id INTEGER PRIMARY KEY AUTOINCREMENT, key VARCHAR(100), data VARCHAR(64,000))`,
+              [],
+            );
+          }
+        },
+        error => {
+          console.log(error, '===err===');
+        },
+      );
+    });
+  };
+
   GetOnlineData = async () => {
     await axios
       .get(`${ApiBaseUrl}pages?per_page=20&_embed`)
       .then(async res => {
         await AsyncStorage.removeItem('OrignalContent');
         this.setState({HeadlinesList: res.data});
-
         await AsyncStorage.setItem('OrignalContent', JSON.stringify(res.data));
         this.setState({
           IsLoading: false,
         });
-        console.log(res.data,'===res===');
       })
       .catch(err => {
         console.log(err);
@@ -139,7 +175,7 @@ class HomeScreen extends Component {
                     onPress={() => {
                       this.props.navigation.navigate('OriginalContent', {
                         link: item.link,
-                        html:item.content.rendered
+                        html: item.content.rendered,
                       });
                     }}
                   >
@@ -150,16 +186,15 @@ class HomeScreen extends Component {
                         textDecorationLine: 'underline',
                       }}
                     >
-                      {
-                      item.title.rendered
-                      .replace(/<[^>]+>/g, '')
-                      .replace('&#8230;', '…')
-                      .replace('&#8217;', '’')
-                      .replace('&#8221;', '”')
-                      .replace('&#8211;', '–')
-                      .replace('&#8220;', '“')
-                      .replace('&#038;', '&')
-                      .replace('&amp;', '&')}
+                      {item.title.rendered
+                        .replace(/<[^>]+>/g, '')
+                        .replace('&#8230;', '…')
+                        .replace('&#8217;', '’')
+                        .replace('&#8221;', '”')
+                        .replace('&#8211;', '–')
+                        .replace('&#8220;', '“')
+                        .replace('&#038;', '&')
+                        .replace('&amp;', '&')}
                     </Text>
                   </TouchableOpacity>
 
@@ -179,8 +214,7 @@ class HomeScreen extends Component {
                       .replace('&#8211;', '–')
                       .replace('&#8220;', '“')
                       .replace('&#038;', '&')
-                      .replace('&amp;', '&')
-                      }
+                      .replace('&amp;', '&')}
                     {'...'}
                   </Text>
 
@@ -201,7 +235,8 @@ class HomeScreen extends Component {
                         fontWeight: 'bold',
                       }}
                     >
-                      {item._embedded.author[0].name} | {moment(item.date).format('MMMM DD, YYYY')}
+                      {item._embedded.author[0].name} |{' '}
+                      {moment(item.date).format('MMMM DD, YYYY')}
                     </Text>
                   </View>
                 </View>
@@ -459,34 +494,33 @@ class HomeScreen extends Component {
               transparent={true}
               visible={this.state.IsOnline}
             >
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  backgroundColor: CustomColors.opacity07,
+                }}
+              >
+                <View style={HomeScreenStyles.registerModalCard}>
+                  <Text
+                    style={{
+                      alignSelf: 'flex-start',
+                      color: CustomColors.black,
+                      marginLeft: wp(-5),
+                      marginBottom: hp(2.5),
+                    }}
+                  >
+                    {Strings.offlinealert}
+                  </Text>
 
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    backgroundColor: CustomColors.opacity07,
-                  }}
-                >
-                  <View style={HomeScreenStyles.registerModalCard}>
-                    <Text
-                      style={{
-                        alignSelf: 'flex-start',
-                        color: CustomColors.black,
-                        marginLeft: wp(-5),
-                        marginBottom: hp(2.5),
-                      }}
-                    >
-                      {Strings.offlinealert}
-                    </Text>
-                   
-                    <GreyButton
-                      onPress={() => {
-                        this.setState({IsOnline: false});
-                      }}
-                      ButtonText={'OK'}
-                    />
-                  </View>
+                  <GreyButton
+                    onPress={() => {
+                      this.setState({IsOnline: false});
+                    }}
+                    ButtonText={'OK'}
+                  />
                 </View>
+              </View>
             </Modal>
           </View>
         </View>

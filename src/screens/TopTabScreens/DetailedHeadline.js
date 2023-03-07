@@ -41,20 +41,12 @@ class DetailedHeadline extends Component {
   getOfflineData = () => {
     Tables1.map(item =>
       db.transaction(tx => {
-        tx.executeSql(`SELECT * FROM ${item}`, [], (tx, results) => {
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i)
-            temp.push(results.rows.item(i));
-          let htmlData = temp.filter(
-            item => item.key === this.props.route.params.link,
-          );
-          htmlData.map(item => {
-            this.setState({
-              htmlTags: item.data,
-            });
+        tx.executeSql(`SELECT * FROM ${item} WHERE key=${JSON.stringify(this.props.route.params.link)}`, [], (tx, results) => {
+          this.setState({
+            htmlTags:results.rows.item(0).data,
           });
         });
-      }),
+      }),      
     );
   };
 
@@ -107,7 +99,7 @@ class DetailedHeadline extends Component {
                   this.setState({
                     isLoading: true,
                   });
-                }, 2000);
+                }, 250);
               }}
               source={{html: this.state.htmlTags}}
             />
@@ -124,10 +116,10 @@ class DetailedHeadline extends Component {
             />
           )}
           {this.state.isLoading === false ? (
-            <View style={{position: 'absolute', top: hp(18), left: wp(13)}}>
+            <View style={{position: 'absolute', alignSelf:'center',top:hp(20)}}>
               <View>
                 <Loader />
-                <Text style={{fontSize: hp(3.5), textAlign: 'center'}}>
+                <Text style={{fontSize: hp(3.5), textAlign: 'center',width:wp(80)}}>
                   Please wait while data is loading
                 </Text>
               </View>
