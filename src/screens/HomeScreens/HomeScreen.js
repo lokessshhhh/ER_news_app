@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   ScrollView,
+  SafeAreaView
 } from 'react-native';
 import {CustomColors} from '../../theme/CustomColors';
 import moment from 'moment';
@@ -140,7 +141,8 @@ class HomeScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: CustomColors.white}}>
+    
+      <SafeAreaView style={{flex: 1, backgroundColor: CustomColors.white}}>
         <View style={{alignItems: 'center'}}>
           <Image
             resizeMode="contain"
@@ -244,7 +246,7 @@ class HomeScreen extends Component {
             ))}
           </ScrollView>
         ) : (
-          <View style={{marginBottom: hp(10), flex: 1}}>
+          <View style={{ flex: 1,marginBottom:hp(10)}}>
             <Tab.Navigator
               tabBarOptions={{
                 pressColor: 'transparent',
@@ -524,7 +526,7 @@ class HomeScreen extends Component {
             </Modal>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

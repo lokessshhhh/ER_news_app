@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, SafeAreaView} from 'react-native';
 import {HomeScreenStyles} from '../HomeScreens/HomeScreenStyles';
 import {Img} from '../../theme/Img';
 import WebView from 'react-native-webview';
@@ -80,7 +80,7 @@ class DetailedHeadline extends Component {
 
   render() {
     return (
-      <View style={HomeScreenStyles.mainBG}>
+      <SafeAreaView style={HomeScreenStyles.mainBG}>
         <MainHeader
           onPressRight={() => {
             this.ShareApp(this.props.route.params.link);
@@ -110,6 +110,7 @@ class DetailedHeadline extends Component {
                   this.setState({
                     isLoading: true,
                   });
+                  console.log('=======loaded=====');
                 }, 1000);
               }}
               source={{uri: this.props.route.params.link}}
@@ -126,7 +127,7 @@ class DetailedHeadline extends Component {
             </View>
           ) : null}
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

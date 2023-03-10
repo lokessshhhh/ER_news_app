@@ -62,7 +62,7 @@ class TopHeadlines extends Component {
         : console.log('No link found')
       : null;
     this.getNetInfo();
-    this.buildLink();
+    // this.buildLink();
   }
 
   buildLink = async () => {

@@ -31,6 +31,7 @@ export const HomeScreenStyles = StyleSheet.create({
   },
   footertabView: {
     width: wp(95),
+    height:hp(10),
     borderTopWidth: 1,
     borderColor: CustomColors.black,
     position: 'absolute',
