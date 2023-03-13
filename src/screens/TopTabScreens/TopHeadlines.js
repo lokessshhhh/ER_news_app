@@ -15,6 +15,7 @@ import {ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import {openDatabase} from 'react-native-sqlite-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {htmlToText} from 'html-to-text';
 
 const db = openDatabase({name: 'offlineMode'});
 
@@ -81,7 +82,7 @@ class TopHeadlines extends Component {
   };
 
   InitialiseDB = () => {
-    Tables.map(item => 
+    Tables.map(item =>
       db.transaction(txn => {
         txn.executeSql(
           `SELECT name FROM sqlite_master WHERE type='table' AND name='${item}'`,
@@ -118,6 +119,14 @@ class TopHeadlines extends Component {
   };
 
   SaveAllDataOffline = async () => {
+    const options = {
+      wordwrap: null,
+      selectors: [
+        {selector: 'img', format: 'skip'},
+        {selector: 'a.button', format: 'skip'},
+      ],
+    };
+
     await axios
       .all(requests)
       .then(
@@ -129,10 +138,11 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
+                      text1 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO topHeadlines (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, responseData],
+                          [item.acf.enter_url, text1],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -153,10 +163,11 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
+                      text2 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO NYstate (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, responseData],
+                          [item.acf.enter_url, text2],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -177,10 +188,11 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
+                      text3 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO NYCLongIsland (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, responseData],
+                          [item.acf.enter_url, text3],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -201,10 +213,11 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
+                      text4 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO breakingStatewide (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, responseData],
+                          [item.acf.enter_url, text4],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -274,11 +287,10 @@ class TopHeadlines extends Component {
   };
 
   ShareApp = async Url => {
-    
     const shareOptions = {
       title: 'Share file',
       failOnCancel: false,
-      urls: [`${Deeplink}${Url}`],
+      urls: [`${Deeplink}`],
     };
 
     try {
@@ -324,6 +336,7 @@ class TopHeadlines extends Component {
                         }}
                         textUrl={item.enter_title
                           .replace(/<[^>]+>/g, '')
+                          .replace('&#8230;', '…')
                           .replace('&#8230;', '…')
                           .replace('&#8217;', '’')
                           .replace('&#8221;', '”')

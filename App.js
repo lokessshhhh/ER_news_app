@@ -14,7 +14,7 @@ class App extends Component {
 
   getId = async () => {
     
-    let fcmtoken = await AsyncStorage.getItem('fcmToken');
+    let fcmtoken = await AsyncStorage.getItem('USER_FCM_TOKEN');
 
     DeviceInfo.getUniqueId()
       .then(async Id => {
@@ -38,10 +38,71 @@ class App extends Component {
       });
   };
 
+  setupNotification = async () => {
+    let accessToken = await AsyncStorage.getItem('USER_FCM_TOKEN');
+    if (!accessToken) {
+      try {
+        fcmService.register(
+          (token) => this.onRegister(token),
+          (notify) => this.onNotification(notify),
+          (notify) => this.onOpenNotification(notify),
+        );
+        localNotificationService.configure((notify) =>
+          this.onOpenNotification(notify),
+        );
+      } catch (error) {
+        console.log('==err======,token');
+       }
+    }
+  };
+
+  onRegister = async (token) => {
+    console.log(token,'==token===');
+    // let fcmToken = await AsyncStorage.getItem("USER_FCM_TOKEN");
+    // let userID = await StorageProvider.get("USER_ID");
+    // this.setState({ userID: userID })
+    // this.sendDeviceTokenApiCallId = await this.apiCall({
+    //   contentType: configJSON.productApiContentType,
+    //   method: configJSON.apiMethodTypePut,
+    //   endPoint: configJSON.sendDeviceTokenAPiEndPoint,
+    //   body: data,
+    // });
+    // Customizable Area Start
+    // Customizable Area End
+  };
+  onNotification = (notify) => {
+    // if (1001 !== 1001)
+    //   return;
+    let uniquedNotifId = Math.floor(Math.random() * 1000 + 1);
+    const options = {
+      soundName: "default",
+      playSound: true,
+    };
+    if (notify.title) {
+      console.log("@@@ FCM Show Notification ==========,", this.notificationMessageId)
+      let notifyMessageId = notify.messageId.replace('0:', '').split('%');
+      notifyMessageId = notifyMessageId[0].substr(notifyMessageId[0].length - 3);
+      console.log('@@@ FCM Show Notification ID =====', notifyMessageId, uniquedNotifId)
+      if (Number(this.notificationMessageId) != Number(notifyMessageId)) {
+        console.log('@@@ FCM Show Notification ID ===== 111', notifyMessageId, uniquedNotifId)
+        this.notificationMessageId = Number(notifyMessageId);
+        // localNotificationService.showNotification(Number(notifyMessageId), notify.title, notify.message, notify, options);
+      }
+    }
+    // Customizable Area Start
+    // Customizable Area End
+  };
+
+
+  onOpenNotification = (notify) => {
+    console.log(notify,'====opennoti-===');
+   };
+
   componentDidMount() {
-    requestUserPermission();
-    GetFCMtoken();
-    NotificationListener();
+    this.setupNotification();
+    // requestUserPermission();
+    // GetFCMtoken();
+    // NotificationListener();
     this.getId();
   }
 

@@ -14,9 +14,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2BE207A829BB3687001095C4 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BE207A729BB3687001095C4 /* Launch Screen.storyboard */; };
 		2BE207AA29BB37BD001095C4 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BE207A929BB37BD001095C4 /* Launch Screen.storyboard */; };
+		2BF0358029BF233D00F5164B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2BF0357F29BF233D00F5164B /* GoogleService-Info.plist */; };
 		7699B88040F8A987B510C191 /* libPods-EmpireReport-EmpireReportTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-EmpireReport-EmpireReportTests.a */; };
-		E52963F629BAEE6C00F83018 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E52963F529BAEE6B00F83018 /* GoogleService-Info.plist */; };
-		E52963F729BAEE6C00F83018 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E52963F529BAEE6B00F83018 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,12 +41,12 @@
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-EmpireReport-EmpireReportTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EmpireReport-EmpireReportTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BE207A729BB3687001095C4 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		2BE207A929BB37BD001095C4 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		2BF0357F29BF233D00F5164B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-EmpireReport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmpireReport.debug.xcconfig"; path = "Target Support Files/Pods-EmpireReport/Pods-EmpireReport.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-EmpireReport.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmpireReport.release.xcconfig"; path = "Target Support Files/Pods-EmpireReport/Pods-EmpireReport.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-EmpireReport-EmpireReportTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmpireReport-EmpireReportTests.debug.xcconfig"; path = "Target Support Files/Pods-EmpireReport-EmpireReportTests/Pods-EmpireReport-EmpireReportTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-EmpireReport.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EmpireReport.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-EmpireReport-EmpireReportTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EmpireReport-EmpireReportTests.release.xcconfig"; path = "Target Support Files/Pods-EmpireReport-EmpireReportTests/Pods-EmpireReport-EmpireReportTests.release.xcconfig"; sourceTree = "<group>"; };
-		E52963F529BAEE6B00F83018 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -91,7 +90,7 @@
 		13B07FAE1A68108700A75B9A /* EmpireReport */ = {
 			isa = PBXGroup;
 			children = (
-				E52963F529BAEE6B00F83018 /* GoogleService-Info.plist */,
+				2BF0357F29BF233D00F5164B /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -243,7 +242,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E52963F729BAEE6C00F83018 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,9 +250,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				2BF0358029BF233D00F5164B /* GoogleService-Info.plist in Resources */,
 				2BE207A829BB3687001095C4 /* Launch Screen.storyboard in Resources */,
 				2BE207AA29BB37BD001095C4 /* Launch Screen.storyboard in Resources */,
-				E52963F629BAEE6C00F83018 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -510,6 +508,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CGZKS6979B;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = EmpireReport/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -537,6 +536,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CGZKS6979B;
 				INFOPLIST_FILE = EmpireReport/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
