@@ -95,9 +95,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.empirereportoffline"
+    namespace "com.perchcreek.empirereportapp"
     defaultConfig {
-        applicationId "com.empirereportoffline"
+        applicationId "com.perchcreek.empirereportapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

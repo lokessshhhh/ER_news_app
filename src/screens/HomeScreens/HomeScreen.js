@@ -283,7 +283,7 @@ class HomeScreen extends Component {
                         {
                           backgroundColor: focused
                             ? CustomColors.tabmainBG
-                            : CustomColors.tabBG,
+                            : CustomColors.white,
                         },
                       ]}
                     >
@@ -305,7 +305,7 @@ class HomeScreen extends Component {
                         {
                           backgroundColor: focused
                             ? CustomColors.tabmainBG
-                            : CustomColors.tabBG,
+                            : CustomColors.white,
                         },
                       ]}
                     >
@@ -327,7 +327,7 @@ class HomeScreen extends Component {
                         {
                           backgroundColor: focused
                             ? CustomColors.tabmainBG
-                            : CustomColors.tabBG,
+                            : CustomColors.white,
                         },
                       ]}
                     >
@@ -349,7 +349,7 @@ class HomeScreen extends Component {
                         {
                           backgroundColor: focused
                             ? CustomColors.tabmainBG
-                            : CustomColors.tabBG,
+                            : CustomColors.white,
                         },
                       ]}
                     >
@@ -395,7 +395,7 @@ class HomeScreen extends Component {
                   backgroundColor:
                     this.state.IsIndex === index
                       ? CustomColors.tabmainBG
-                      : CustomColors.tabBG,
+                      : CustomColors.white,
                 },
               ]}
             >

@@ -28,6 +28,7 @@ export const HomeScreenStyles = StyleSheet.create({
     color: CustomColors.black,
     fontSize: hp(1.8),
     textAlign: 'center',
+    fontWeight:'bold'
   },
   footertabView: {
     width: wp(95),

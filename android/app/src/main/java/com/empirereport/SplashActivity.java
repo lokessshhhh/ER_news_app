@@ -1,4 +1,4 @@
-package com.empirereportoffline;
+package com.perchcreek.empirereportapp;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

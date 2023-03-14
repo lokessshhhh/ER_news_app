@@ -1,4 +1,4 @@
-package com.empirereportoffline;
+package com.perchcreek.empirereportapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

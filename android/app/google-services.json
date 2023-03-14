@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1018703142299:android:5db6178a151198fe41553e",
+        "mobilesdk_app_id": "1:1018703142299:android:a3e8f6dd5a53ec9f41553e",
         "android_client_info": {
-          "package_name": "com.empirereportoffline"
+          "package_name": "com.perchcreek.empirereportapp"
         }
       },
       "oauth_client": [
@@ -31,10 +31,11 @@
               "client_type": 3
             },
             {
-              "client_id": "1018703142299-la9t2rpnjr8h8pc5a1sa6cggmiadjklk.apps.googleusercontent.com",
+              "client_id": "1018703142299-e90gh2tp80bf2pnv693dcmchs6hugqqj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.perchcreek.empirereportapp"
+                "bundle_id": "com.perchcreek.empirereportapp",
+                "app_store_id": "1548705748"
               }
             }
           ]

@@ -110,7 +110,6 @@ class DetailedHeadline extends Component {
                   this.setState({
                     isLoading: true,
                   });
-                  console.log('=======loaded=====');
                 }, 1000);
               }}
               source={{uri: this.props.route.params.link}}
