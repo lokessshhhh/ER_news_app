@@ -15,6 +15,7 @@ import {ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import {openDatabase} from 'react-native-sqlite-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {decode} from 'html-entities';
 import {htmlToText} from 'html-to-text';
 
 const db = openDatabase({name: 'offlineMode'});
@@ -32,6 +33,8 @@ const Tables = [
   'NYCLongIsland',
   'breakingStatewide',
 ];
+
+const Data = decode('Hello user! &#8222 !How are you');
 
 const requests = urls.map(url => axios.get(url));
 
@@ -53,6 +56,7 @@ class TopHeadlines extends Component {
   // };
 
   componentDidMount() {
+    console.log(Data, '=====alldata========');
     // dynamicLinks().onLink(this.handleDynamicLink());
     // // When the component is unmounted, remove the listener
     this.props.route.params
@@ -119,13 +123,15 @@ class TopHeadlines extends Component {
   };
 
   SaveAllDataOffline = async () => {
-    const options = {
-      wordwrap: null,
-      selectors: [
-        {selector: 'img', format: 'skip'},
-        {selector: 'a.button', format: 'skip'},
-      ],
-    };
+    // const options = {
+    //   wordwrap: 60000,
+    //   // selectors: [
+    //   //   {selector: 'img', format: 'skip'},
+    //   //   // {selector: 'a.button', format: 'skip'},
+    //   // ],
+    // };
+
+    // text = htmlToText(responseData);
 
     await axios
       .all(requests)
@@ -138,11 +144,10 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
-                      text1 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO topHeadlines (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, text1],
+                          [item.acf.enter_url, responseData],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -163,11 +168,10 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
-                      text2 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO NYstate (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, text2],
+                          [item.acf.enter_url, responseData],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -188,11 +192,10 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
-                      text3 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO NYCLongIsland (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, text3],
+                          [item.acf.enter_url, responseData],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -213,11 +216,10 @@ class TopHeadlines extends Component {
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
                     .then(async responseData => {
-                      text4 = htmlToText(responseData, options);
                       db.transaction(function (tx) {
                         tx.executeSql(
                           'INSERT INTO breakingStatewide (key, data) VALUES (?,?)',
-                          [item.acf.enter_url, text4],
+                          [item.acf.enter_url, responseData],
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
@@ -290,9 +292,8 @@ class TopHeadlines extends Component {
     const shareOptions = {
       title: 'Share file',
       failOnCancel: false,
-      urls: [`${Deeplink}`],
+      urls: [`${Url}`],
     };
-
     try {
       const ShareResponse = await Share.open(shareOptions);
       console.log('Result =>', ShareResponse);
@@ -334,17 +335,7 @@ class TopHeadlines extends Component {
                             link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title
-                          .replace(/<[^>]+>/g, '')
-                          .replace('&#8230;', '…')
-                          .replace('&#8230;', '…')
-                          .replace('&#8217;', '’')
-                          .replace('&#8221;', '”')
-                          .replace('&#8211;', '–')
-                          .replace('&#8220;', '“')
-                          .replace('&#038;', '&')
-                          .replace('&amp;', '&')
-                        }
+                        textUrl={decode(item.enter_title)}
                       />
                     )
                   ) : null

@@ -10,11 +10,12 @@ import {
 } from './src/utils/notificationHelper';
 import {requestUserPermission} from './src/utils/notificationHelper';
 import {GetFCMtoken} from './src/utils/notificationHelper';
+import SplashScreen from 'react-native-splash-screen';
 
 class App extends Component {
   getId = async () => {
-    let fcmtoken = await AsyncStorage.getItem('USER_FCM_TOKEN');
-
+    let fcmtoken = await AsyncStorage.getItem('fcmToken');
+    console.log(fcmtoken);
     DeviceInfo.getUniqueId()
       .then(async Id => {
         let formData = {
@@ -36,6 +37,10 @@ class App extends Component {
         console.log(err, '====system err=====');
       });
   };
+
+  componentWillMount() {
+    SplashScreen.hide();
+    }
 
   componentDidMount() {
     // this.setupNotification();

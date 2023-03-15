@@ -14,6 +14,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import Share from 'react-native-share';
+import {decode} from 'html-entities';
 
 class BreakingState extends Component {
 
@@ -80,7 +81,7 @@ class BreakingState extends Component {
     const shareOptions = {
       title: 'Share file',
       failOnCancel: false,
-      urls: [`${Deeplink}${Url}`],
+      urls: [`${Url}`],
     };
     try {
       const ShareResponse = await Share.open(shareOptions);
@@ -123,16 +124,7 @@ class BreakingState extends Component {
                             link: item.enter_url,
                           });
                         }}
-                        textUrl={item.enter_title
-                          .replace(/<[^>]+>/g, '')
-                          .replace('&#8230;', '…')
-                          .replace('&#8217;', '’')
-                          .replace('&#8221;', '”')
-                          .replace('&#8211;', '–')
-                          .replace('&#8220;', '“')
-                          .replace('&#038;', '&')
-                          .replace('&amp;', '&')
-                        }
+                        textUrl={decode(item.enter_title)}
                       />
                     )
                   ) : null

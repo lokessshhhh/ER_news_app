@@ -30,6 +30,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TopHeadlines from '../TopTabScreens/TopHeadlines';
 import {openDatabase} from 'react-native-sqlite-storage';
+import {decode} from 'html-entities';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -188,15 +189,7 @@ class HomeScreen extends Component {
                         textDecorationLine: 'underline',
                       }}
                     >
-                      {item.title.rendered
-                        .replace(/<[^>]+>/g, '')
-                        .replace('&#8230;', '…')
-                        .replace('&#8217;', '’')
-                        .replace('&#8221;', '”')
-                        .replace('&#8211;', '–')
-                        .replace('&#8220;', '“')
-                        .replace('&#038;', '&')
-                        .replace('&amp;', '&')}
+                      {decode(item.title.rendered)}
                     </Text>
                   </TouchableOpacity>
 
@@ -208,15 +201,8 @@ class HomeScreen extends Component {
                       marginVertical: hp(1),
                     }}
                   >
-                    {item.excerpt.rendered
-                      .replace(/<[^>]+>/g, '')
-                      .replace('&#8230;', '…')
-                      .replace('&#8217;', '’')
-                      .replace('&#8221;', '”')
-                      .replace('&#8211;', '–')
-                      .replace('&#8220;', '“')
-                      .replace('&#038;', '&')
-                      .replace('&amp;', '&')}
+                    {decode(item.excerpt.rendered)
+                      .replace(/<[^>]+>/g, '')}
                     {'...'}
                   </Text>
 

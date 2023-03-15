@@ -68,7 +68,7 @@ class DetailedHeadline extends Component {
     const shareOptions = {
       title: 'Share file',
       failOnCancel: false,
-      urls: [`https://empirereport.com/TopHeadlines?id=${Url}`],
+      urls: [`${Url}`],
     };
     try {
       const ShareResponse = await Share.open(shareOptions);
