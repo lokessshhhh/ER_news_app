@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
 import {HomeScreenStyles} from './HomeScreenStyles';
 import {Img} from '../../theme/Img';
 import WebView from 'react-native-webview';
@@ -80,16 +80,12 @@ class OriginalContent extends Component {
               source={{uri: this.props.route.params.link}}
             />
           ) : (
-            <WebView
-              onLoadEnd={() => {
-                setTimeout(() => {
-                  this.setState({
-                    isLoading: true,
-                  });
-                }, 1000);
-              }}
-              source={{html: this.props.route.params.html}}
-            />
+            <ScrollView>
+              <Text 
+            style={{fontSize: hp(2.5), color: CustomColors.black}}>
+                {this.props.route.params.html}
+              </Text>
+            </ScrollView>
           )}
           {this.state.isLoading === false ? (
             <View style={{position: 'absolute', top: hp(20), left: wp(45)}}>

@@ -6,40 +6,15 @@ import HomeScreen from '../screens/HomeScreens/HomeScreen';
 import TopHeadlines from '../screens/TopTabScreens/TopHeadlines';
 import DetailedHeadline from '../screens/TopTabScreens/DetailedHeadline';
 import OriginalContent from '../screens/HomeScreens/OriginalContent';
+import SplashScreen from '../screens/HomeScreens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
-const linking = {
-  
-  prefixes: ['empirereport://', 'https://empirereport.com' , 'http://empirereport.com'],
-  config: {
-    screens: {
-      TopHeadlines: {
-        path: 'TopHeadlines/:id?',
-        parse: {
-          id: (id) => {
-            console.log('Code ', id);
-            return `${id}`,
-            decodeURIComponent(id)
-          },
-        },
-      },
-      DetailedHeadline: {
-        path: 'DetailedHeadline/:link?',
-        parse: {
-          link: (link) => {
-            console.log('Code ', link);
-            return `${link}`,
-            decodeURIComponent(link);
-          },
-        },
-      },
-    },
-  },
-};
-
 const screens = [
- 
+  {
+    name: 'SplashScreen',
+    component: SplashScreen,
+  },
   {
     name: 'HomeScreen',
     component: HomeScreen,
@@ -61,7 +36,7 @@ const screens = [
 class Route extends Component {
   render() {
     return (
-      <NavigationContainer linking={linking}>
+      <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
             headerShown: false,

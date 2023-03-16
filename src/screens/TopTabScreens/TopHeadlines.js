@@ -138,8 +138,9 @@ class TopHeadlines extends Component {
       .then(
         axios.spread(
           (firstResponse, secondResponse, thirdResponse, fourthResponse) => {
+            
             firstResponse.data.map(item =>
-              item.acf.enter_url === '' || null
+              item.acf.enter_url === '' || null 
                 ? null
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
@@ -320,7 +321,7 @@ class TopHeadlines extends Component {
                 data={this.state.HeadlinesList}
                 renderItem={({item}) =>
                   this.state.HeadlinesList ? (
-                    item.enter_url === '' || item.enter_url === null ? null : (
+                    item.enter_url === '' || item.enter_url === null || item.enter_url === "mailto:info@empirereportnewyork.com" ? null : (
                       <RenderLists
                         imgSource={item.upload_image}
                         isHorizontalLine={

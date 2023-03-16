@@ -9,4 +9,5 @@ export const Img = {
     nystate:require('../assets/nystate.png'),
     nyclong:require('../assets/nyclong.png'),
     breaking:require('../assets/breaking.png'),
+    splashScreen:require('../assets/splashScreen.png'),
     }

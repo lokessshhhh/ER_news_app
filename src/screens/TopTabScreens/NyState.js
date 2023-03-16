@@ -111,7 +111,7 @@ class NyState extends Component {
                 data={this.state.HeadlinesList}
                 renderItem={({item}) =>
                   this.state.HeadlinesList ? (
-                    item.enter_url === '' || item.enter_url === null ? null : (
+                    item.enter_url === '' || item.enter_url === null || item.enter_url.includes('mailto') ?  null : (
                       <RenderLists
                         imgSource={item.upload_image}
                         isHorizontalLine={

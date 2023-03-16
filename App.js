@@ -6,11 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FCM_API_KEY, WP_JSON_URL} from './src/utils/Config';
 import {
   createNotificationListeners,
-  fcmService,
 } from './src/utils/notificationHelper';
 import {requestUserPermission} from './src/utils/notificationHelper';
 import {GetFCMtoken} from './src/utils/notificationHelper';
-import SplashScreen from 'react-native-splash-screen';
 
 class App extends Component {
   getId = async () => {
@@ -38,9 +36,7 @@ class App extends Component {
       });
   };
 
-  componentWillMount() {
-    SplashScreen.hide();
-    }
+  
 
   componentDidMount() {
     // this.setupNotification();

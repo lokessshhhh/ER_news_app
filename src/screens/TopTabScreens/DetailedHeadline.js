@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, SafeAreaView} from 'react-native';
+import {View, Text, SafeAreaView, ScrollView} from 'react-native';
 import {HomeScreenStyles} from '../HomeScreens/HomeScreenStyles';
 import {Img} from '../../theme/Img';
 import WebView from 'react-native-webview';
@@ -12,6 +12,8 @@ import {
 } from '../../theme/layout';
 import Loader from '../../component/Loader';
 import {openDatabase} from 'react-native-sqlite-storage';
+import {htmlToText} from 'html-to-text';
+import {CustomColors} from '../../theme/CustomColors';
 
 const db = openDatabase({name: 'offlineMode'});
 
@@ -29,6 +31,7 @@ class DetailedHeadline extends Component {
       isOnline: false,
       htmlTags: '',
       isLoading: false,
+      ismailTo: false,
     };
   }
 
@@ -39,14 +42,29 @@ class DetailedHeadline extends Component {
   }
 
   getOfflineData = () => {
+    const options = {
+      wordwrap: null,
+      selectors: [
+        { selector: 'img', format: 'skip' },
+        { selector: 'a.button', format: 'skip' },
+      ]
+    };
+
     Tables1.map(item =>
       db.transaction(tx => {
-        tx.executeSql(`SELECT * FROM ${item} WHERE key=${JSON.stringify(this.props.route.params.link)}`, [], (tx, results) => {
-          this.setState({
-            htmlTags:results.rows.item(0).data,
-          });
-        });
-      }),      
+        tx.executeSql(
+          `SELECT * FROM ${item} WHERE key=${JSON.stringify(
+            this.props.route.params.link,
+          )}`,
+          [],
+          (tx, results) => {
+            let text = htmlToText(results.rows.item(0).data,options);
+            this.setState({
+              htmlTags: text,
+            });
+          },
+        );
+      }),
     );
   };
 
@@ -59,6 +77,7 @@ class DetailedHeadline extends Component {
       } else {
         this.setState({
           isOnline: false,
+          isLoading:true
         });
       }
     });
@@ -91,41 +110,43 @@ class DetailedHeadline extends Component {
           ImgLeft={Img.back}
           ImgRight={Img.share}
         />
-        <View style={{flex: 1}}>
-          {!this.state.isOnline ? (
-            <WebView
-              onLoadEnd={() => {
-                setTimeout(() => {
-                  this.setState({
-                    isLoading: true,
-                  });
-                }, 250);
-              }}
-              source={{html: this.state.htmlTags}}
-            />
-          ) : (
-            <WebView
-              onLoadEnd={() => {
-                setTimeout(() => {
-                  this.setState({
-                    isLoading: true,
-                  });
-                }, 1000);
-              }}
-              source={{uri: this.props.route.params.link}}
-            />
-          )}
-          {this.state.isLoading === false ? (
-            <View style={{position: 'absolute', alignSelf:'center',top:hp(20)}}>
-              <View>
-                <Loader />
-                <Text style={{fontSize: hp(3.5), textAlign: 'center',width:wp(80)}}>
-                  Please wait while data is loading
-                </Text>
-              </View>
+        {!this.state.isOnline ? (
+          <ScrollView>
+            <Text 
+            style={{fontSize: hp(2.5), color: CustomColors.black}}>
+              {this.state.htmlTags}
+            </Text>
+          </ScrollView>
+        ) : (
+          <WebView
+            onLoadEnd={() => {
+              setTimeout(() => {
+                this.setState({
+                  isLoading: true,
+                });
+              }, 1000);
+            }}
+            source={{uri: this.props.route.params.link}}
+          />
+        )}
+        {this.state.isLoading === false ? (
+          <View
+            style={{position: 'absolute', alignSelf: 'center', top: hp(20)}}
+          >
+            <View>
+              <Loader />
+              <Text
+                style={{
+                  fontSize: hp(3.5),
+                  textAlign: 'center',
+                  width: wp(80),
+                }}
+              >
+                Please wait while data is loading
+              </Text>
             </View>
-          ) : null}
-        </View>
+          </View>
+        ) : null}
       </SafeAreaView>
     );
   }
