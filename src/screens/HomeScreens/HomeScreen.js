@@ -164,8 +164,9 @@ class HomeScreen extends Component {
             style={{flex: 1, marginTop: hp(2.5), marginBottom: hp(10)}}
             contentContainerStyle={{alignItems: 'center'}}
           >
-            {this.state.HeadlinesList.map(item => (
+            {this.state.HeadlinesList.map((item, index) => (
               <View
+                key={index}
                 style={{
                   width: wp(90),
                   padding: wp(2.5),
@@ -351,6 +352,7 @@ class HomeScreen extends Component {
         <View style={HomeScreenStyles.footertabView}>
           {FooterButtonArray.map((item, index) => (
             <TouchableOpacity
+              key={index}
               onPress={() => {
                 index === 2
                   ? this.setState({

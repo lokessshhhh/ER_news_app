@@ -12,14 +12,15 @@ import {
   heightPercentageToDP as hp,
 } from '../../theme/layout';
 import {CustomColors} from '../../theme/CustomColors';
+import {htmlToText} from 'html-to-text';
 
 class OriginalContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isOnline: false,
-      htmlTags: '',
-      isLoading: false,
+      offlineText: '',
+      isLoading: true,
     };
   }
 
@@ -28,6 +29,13 @@ class OriginalContent extends Component {
   }
 
   getNetInfo = () => {
+    const options = {
+      wordwrap: 130,
+      selectors: [
+        {selector: 'img', format: 'skip'},
+        {selector: 'a.button', format: 'skip'},
+      ],
+    };
     NetInfo.addEventListener(state => {
       if (state.isConnected) {
         this.setState({
@@ -36,6 +44,8 @@ class OriginalContent extends Component {
       } else {
         this.setState({
           isOnline: false,
+          offlineText: htmlToText(this.props.route.params.html, options),
+          isLoading: false,
         });
       }
     });
@@ -73,19 +83,19 @@ class OriginalContent extends Component {
             <WebView
               onLoadEnd={() => {
                 this.setState({
-                  isLoading: true,
+                  isLoading: false,
                 });
               }}
               source={{uri: this.props.route.params.link}}
             />
           ) : (
             <ScrollView>
-              <Text style={{fontSize: hp(2.5), color: CustomColors.black}}>
-                {this.props.route.params.html}
+              <Text style={{fontSize: hp(2.5), color: CustomColors.black, margin: hp(2)}}>
+                {this.state.offlineText}
               </Text>
             </ScrollView>
           )}
-          {this.state.isLoading === false ? (
+          {this.state.isLoading ? (
             <View style={{position: 'absolute', top: hp(20), left: wp(45)}}>
               <Loader />
             </View>
