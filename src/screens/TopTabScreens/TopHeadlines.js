@@ -48,13 +48,6 @@ class TopHeadlines extends Component {
     };
   }
 
-  // handleDynamicLink = link => {
-  //   // Handle dynamic link inside your own application
-  //   if (link.url === 'https://invertase.io/offer') {
-  //     // ...navigate to your offers screen
-  //   }
-  // };
-
   componentDidMount() {
     console.log(Data, '=====alldata========');
     // dynamicLinks().onLink(this.handleDynamicLink());
@@ -138,9 +131,9 @@ class TopHeadlines extends Component {
       .then(
         axios.spread(
           (firstResponse, secondResponse, thirdResponse, fourthResponse) => {
-            
+
             firstResponse.data.map(item =>
-              item.acf.enter_url === '' || null 
+              item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
                 ? null
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
@@ -164,7 +157,7 @@ class TopHeadlines extends Component {
                     .catch(err => console.error(err, '====promice err 1=====')),
             );
             secondResponse.data.map(item =>
-              item.acf.enter_url === '' || null
+              item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
                 ? null
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
@@ -188,7 +181,7 @@ class TopHeadlines extends Component {
                     .catch(err => console.log(err, '====promice err 2=====')),
             );
             thirdResponse.data.map(item =>
-              item.acf.enter_url === '' || null
+              item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
                 ? null
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
@@ -212,7 +205,7 @@ class TopHeadlines extends Component {
                     .catch(err => console.log(err, '====promice err 3=====')),
             );
             fourthResponse.data.map(item =>
-              item.acf.enter_url === '' || null
+              item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
                 ? null
                 : fetch(item.acf.enter_url)
                     .then(response => response.text())
@@ -319,9 +312,10 @@ class TopHeadlines extends Component {
               <FlatList
                 scrollEnabled={false}
                 data={this.state.HeadlinesList}
+                keyExtractor={(item, index) => index}
                 renderItem={({item}) =>
                   this.state.HeadlinesList ? (
-                    item.enter_url === '' || item.enter_url === null || item.enter_url === "mailto:info@empirereportnewyork.com" ? null : (
+                    item.enter_url === '' || item.enter_url === null || item.enter_url.includes('mailto:') ? null : (
                       <RenderLists
                         imgSource={item.upload_image}
                         isHorizontalLine={

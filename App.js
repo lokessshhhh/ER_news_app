@@ -22,6 +22,7 @@ class App extends Component {
           subscription: 'Device',
           device_uuid: Id,
         };
+        console.log(formData, '===form data===');
         await axios
           .post(`${WP_JSON_URL}fcm/pn/subscribe`, formData)
           .then(res => {

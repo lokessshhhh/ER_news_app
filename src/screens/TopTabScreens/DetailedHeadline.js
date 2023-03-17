@@ -43,11 +43,11 @@ class DetailedHeadline extends Component {
 
   getOfflineData = () => {
     const options = {
-      wordwrap: null,
+      wordwrap: 130,
       selectors: [
-        { selector: 'img', format: 'skip' },
-        { selector: 'a.button', format: 'skip' },
-      ]
+        {selector: 'img', format: 'skip'},
+        {selector: 'a.button', format: 'skip'},
+      ],
     };
 
     Tables1.map(item =>
@@ -58,7 +58,7 @@ class DetailedHeadline extends Component {
           )}`,
           [],
           (tx, results) => {
-            let text = htmlToText(results.rows.item(0).data,options);
+            let text = htmlToText(results.rows.item(0).data, options);
             this.setState({
               htmlTags: text,
             });
@@ -77,7 +77,7 @@ class DetailedHeadline extends Component {
       } else {
         this.setState({
           isOnline: false,
-          isLoading:true
+          isLoading: true,
         });
       }
     });
@@ -112,27 +112,23 @@ class DetailedHeadline extends Component {
         />
         {!this.state.isOnline ? (
           <ScrollView>
-            <Text 
-            style={{fontSize: hp(2.5), color: CustomColors.black}}>
+            <Text style={{fontSize: hp(2.5), color: CustomColors.black, margin: hp(2)}}>
               {this.state.htmlTags}
             </Text>
           </ScrollView>
         ) : (
           <WebView
             onLoadEnd={() => {
-              setTimeout(() => {
-                this.setState({
-                  isLoading: true,
-                });
-              }, 1000);
+              this.setState({
+                isLoading: true,
+              });
             }}
             source={{uri: this.props.route.params.link}}
           />
         )}
         {this.state.isLoading === false ? (
           <View
-            style={{position: 'absolute', alignSelf: 'center', top: hp(20)}}
-          >
+            style={{position: 'absolute', alignSelf: 'center', top: hp(20)}}>
             <View>
               <Loader />
               <Text
@@ -140,8 +136,7 @@ class DetailedHeadline extends Component {
                   fontSize: hp(3.5),
                   textAlign: 'center',
                   width: wp(80),
-                }}
-              >
+                }}>
                 Please wait while data is loading
               </Text>
             </View>

@@ -142,7 +142,7 @@ class HomeScreen extends Component {
 
   render() {
     return (
-    
+
       <SafeAreaView style={{flex: 1, backgroundColor: CustomColors.white}}>
         <View style={{alignItems: 'center'}}>
           <Image
@@ -234,10 +234,8 @@ class HomeScreen extends Component {
         ) : (
           <View style={{ flex: 1,marginBottom:hp(10)}}>
             <Tab.Navigator
-              tabBarOptions={{
-                pressColor: 'transparent',
-              }}
               screenOptions={{
+                tabBarPressColor: 'transparent',
                 tabBarStyle: {
                   backgroundColor: 'transparent',
                   elevation: 0,

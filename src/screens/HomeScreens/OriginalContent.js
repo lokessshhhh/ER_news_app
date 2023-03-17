@@ -11,6 +11,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../../theme/layout';
+import {CustomColors} from '../../theme/CustomColors';
 
 class OriginalContent extends Component {
   constructor(props) {
@@ -71,18 +72,15 @@ class OriginalContent extends Component {
           {this.state.isOnline ? (
             <WebView
               onLoadEnd={() => {
-                setTimeout(() => {
-                  this.setState({
-                    isLoading: true,
-                  });
-                }, 1000);
+                this.setState({
+                  isLoading: true,
+                });
               }}
               source={{uri: this.props.route.params.link}}
             />
           ) : (
             <ScrollView>
-              <Text 
-            style={{fontSize: hp(2.5), color: CustomColors.black}}>
+              <Text style={{fontSize: hp(2.5), color: CustomColors.black}}>
                 {this.props.route.params.html}
               </Text>
             </ScrollView>
