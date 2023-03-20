@@ -2,6 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import {Platform} from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import DeviceInfo from 'react-native-device-info';
+import { FCM_API_KEY } from './Config';
+import { WP_JSON_URL } from './Config';
+import axios from 'axios';
 
 export async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
@@ -16,12 +20,54 @@ export async function requestUserPermission() {
 export async function GetFCMtoken() {
   let fcmtoken = await AsyncStorage.getItem('fcmToken');
   console.log('Old Token:', fcmtoken, '======');
+  DeviceInfo.getUniqueId()
+        .then(async Id => {
+          console.log(Id,'===unique ID:===');
+          let formData = {
+            rest_api_key: FCM_API_KEY,
+            device_token: fcmtoken,
+            subscription: 'Device',
+            device_uuid: Id,
+          };
+          await axios
+            .post(`${WP_JSON_URL}fcm/pn/subscribe`, formData)
+            .then(res => {
+              console.log(res.data, '===token res===');
+            })
+            .catch(err => {
+              console.log(err.response.data, '===token err==');
+            });
+        })
+        .catch(err => {
+          console.log(err, '====system err=====');
+        });
   if (!fcmtoken) {
     try {
       let fcmtoken = await messaging().getToken();
       if (fcmtoken) {
         await AsyncStorage.setItem('fcmToken', fcmtoken);
         console.log('New Token :', fcmtoken, '=====');
+        DeviceInfo.getUniqueId()
+        .then(async Id => {
+          console.log(Id,'===unique ID:===');
+          let formData = {
+            rest_api_key: FCM_API_KEY,
+            device_token: fcmtoken,
+            subscription: 'Device',
+            device_uuid: Id,
+          };
+          await axios
+            .post(`${WP_JSON_URL}fcm/pn/subscribe`, formData)
+            .then(res => {
+              console.log(res.data, '===token new res===');
+            })
+            .catch(err => {
+              console.log(err.response.data, '===token new err==');
+            });
+        })
+        .catch(err => {
+          console.log(err, '====system err=====');
+        });
       }
     } catch (error) {
       console.log(error, '===err===');

@@ -9,9 +9,11 @@ import {
 import { HomeScreenStyles } from '../screens/HomeScreens/HomeScreenStyles';
 
 
-const GreyInput = ({placeholder}) => {
+const GreyInput = ({placeholder,onChangeText,value}) => {
     return (
         <TextInput
+        onChangeText={onChangeText}
+        value={value}
         style={HomeScreenStyles.greyInputStyle}
         placeholderTextColor={CustomColors.tabBG}
         placeholder={placeholder}

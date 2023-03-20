@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Modal,
   ScrollView,
-  SafeAreaView
+  SafeAreaView,
+  Linking,
 } from 'react-native';
 import {CustomColors} from '../../theme/CustomColors';
 import moment from 'moment';
@@ -25,16 +26,19 @@ import GreyInput from '../../component/GreyInput';
 import GreyButton from '../../component/GreyButton';
 import NetInfo from '@react-native-community/netinfo';
 import {Strings} from '../../theme/Strings';
-import {ApiBaseUrl} from '../../utils/Config';
+import {ApiBaseUrl, SUBMIT_TIPS_URL} from '../../utils/Config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TopHeadlines from '../TopTabScreens/TopHeadlines';
 import {openDatabase} from 'react-native-sqlite-storage';
 import {decode} from 'html-entities';
+import MailchimpSubscribe from "react-mailchimp-subscribe";
 
 const Tab = createMaterialTopTabNavigator();
 
 const db = openDatabase({name: 'offlineMode'});
+
+const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
 const FooterButtonArray = [
   {
@@ -55,14 +59,38 @@ class HomeScreen extends Component {
       IsIndex: null,
       NewsSettler: false,
       SubmitTips: false,
+      newssettlerSuccess: false,
       IsOnline: false,
       IsLoading: false,
       HeadlinesList: [],
+      message: '',
+      name: '',
+      email: '',
+      notValid: false,
+      fname: '',
+      lname: '',
+      uemail: '',
     };
   }
 
   componentDidMount() {
     this.getNetInfo();
+    this.CustomForm();
+  };
+
+   CustomForm = () => {
+    <MailchimpSubscribe
+      url={ApiBaseUrl}
+      render={({ subscribe, status, message }) => (
+        console.log(subscribe,'===='),
+        <div>
+          <CustomForm onSubmitted={formData => subscribe(formData)} />
+          {status === "sending" && <div style={{ color: "blue" }}>sending...</div>}
+          {status === "error" && <div style={{ color: "red" }} dangerouslySetInnerHTML={{__html: message}}/>}
+          {status === "success" && <div style={{ color: "green" }}>Subscribed !</div>}
+        </div>
+      )}
+    />
   }
 
   InitialiseDB = () => {
@@ -140,9 +168,41 @@ class HomeScreen extends Component {
     });
   };
 
+  submitTips = () => {
+    this.state.name === '' ||
+    this.state.email === '' ||
+    this.state.message === ''
+      ? this.setState({
+          notValid: true,
+        })
+      : (Linking.openURL(`${SUBMIT_TIPS_URL}${this.state.message} ${this.state.name}`),
+        this.setState({
+          SubmitTips: false,
+          name: '',
+          email: '',
+          message: '',
+          notValid: false,
+        }));
+  };
+
+  setNewssettler = () => {
+    this.state.fname === '' ||
+    this.state.lname === '' ||
+    this.state.uemail === ''
+      ? this.setState({
+          notValid: true,
+        })
+      : this.setState({
+          fname: '',
+          lemail: '',
+          uemail: '',
+          newssettlerSuccess: true,
+          NewsSettler: false,
+        });
+  };
+
   render() {
     return (
-
       <SafeAreaView style={{flex: 1, backgroundColor: CustomColors.white}}>
         <View style={{alignItems: 'center'}}>
           <Image
@@ -193,7 +253,6 @@ class HomeScreen extends Component {
                       {decode(item.title.rendered)}
                     </Text>
                   </TouchableOpacity>
-
                   <Text
                     numberOfLines={3}
                     style={{
@@ -202,8 +261,7 @@ class HomeScreen extends Component {
                       marginVertical: hp(1),
                     }}
                   >
-                    {decode(item.excerpt.rendered)
-                      .replace(/<[^>]+>/g, '')}
+                    {decode(item.excerpt.rendered).replace(/<[^>]+>/g, '')}
                     {'...'}
                   </Text>
 
@@ -233,7 +291,7 @@ class HomeScreen extends Component {
             ))}
           </ScrollView>
         ) : (
-          <View style={{ flex: 1,marginBottom:hp(10)}}>
+          <View style={{flex: 1, marginBottom: hp(10)}}>
             <Tab.Navigator
               screenOptions={{
                 tabBarPressColor: 'transparent',
@@ -389,6 +447,8 @@ class HomeScreen extends Component {
             </TouchableOpacity>
           ))}
           <View>
+            {/* Email NewsSettler Modal */}
+
             <Modal
               animationType="slide"
               transparent={true}
@@ -425,13 +485,59 @@ class HomeScreen extends Component {
                   >
                     {'SIGN UP FOR EMPIRE REPORT’S DAILY NEWSLETTER'}
                   </Text>
-                  <GreyInput placeholder={'First Name'} />
-                  <GreyInput placeholder={'Last Name'} />
-                  <GreyInput placeholder={'Your Email Address'} />
-                  <GreyButton ButtonText={'Submit'} />
+                  <GreyInput
+                    onChangeText={value =>
+                      this.setState({
+                        fname: value,
+                      })
+                    }
+                    value={this.state.fname}
+                    placeholder={'First Name'}
+                  />
+                  {this.state.notValid && this.state.fname === '' ? (
+                    <Text style={HomeScreenStyles.errText}>
+                      {Strings.fnameAlert}
+                    </Text>
+                  ) : null}
+                  <GreyInput
+                    onChangeText={value =>
+                      this.setState({
+                        lname: value,
+                      })
+                    }
+                    value={this.state.lname}
+                    placeholder={'Last Name'}
+                  />
+                  {this.state.notValid && this.state.lname === '' ? (
+                    <Text style={HomeScreenStyles.errText}>
+                      {Strings.lnameAlert}
+                    </Text>
+                  ) : null}
+                  <GreyInput
+                    onChangeText={value =>
+                      this.setState({
+                        uemail: value,
+                      })
+                    }
+                    value={this.state.uemail}
+                    placeholder={'Your Email Address'}
+                  />
+                  {this.state.notValid && this.state.uemail === '' ? (
+                    <Text style={HomeScreenStyles.errText}>
+                      {Strings.emailAlert}
+                    </Text>
+                  ) : null}
+                  <GreyButton
+                    onPress={() => {
+                      this.setNewssettler();
+                    }}
+                    ButtonText={'Submit'}
+                  />
                 </View>
               </View>
             </Modal>
+
+            {/* Submit Tips Modal */}
 
             <Modal
               animationType="slide"
@@ -469,13 +575,59 @@ class HomeScreen extends Component {
                   >
                     {'YOU CAN SUBMIT YOUR TIPS BELOW'}
                   </Text>
-                  <GreyInput placeholder={'Name'} />
-                  <GreyInput placeholder={'Email'} />
-                  <GreyInput placeholder={'Message'} />
-                  <GreyButton ButtonText={'Submit'} />
+                  <GreyInput
+                    onChangeText={value =>
+                      this.setState({
+                        name: value,
+                      })
+                    }
+                    value={this.state.name}
+                    placeholder={'Name'}
+                  />
+                  {this.state.notValid && this.state.name === '' ? (
+                    <Text style={HomeScreenStyles.errText}>
+                      {Strings.nameAlert}
+                    </Text>
+                  ) : null}
+                  <GreyInput
+                    value={this.state.email}
+                    onChangeText={value =>
+                      this.setState({
+                        email: value,
+                      })
+                    }
+                    placeholder={'Email'}
+                  />
+                  {this.state.notValid && this.state.email === '' ? (
+                    <Text style={HomeScreenStyles.errText}>
+                      { Strings.emailAlert}
+                    </Text>
+                  ) : null}
+                  <GreyInput
+                    value={this.state.message}
+                    onChangeText={value =>
+                      this.setState({
+                        message: value,
+                      })
+                    }
+                    placeholder={'Message'}
+                  />
+                  {this.state.notValid && this.state.message === '' ? (
+                    <Text style={HomeScreenStyles.errText}>
+                      {Strings.msgAlert}
+                    </Text>
+                  ) : null}
+                  <GreyButton
+                    onPress={() => {
+                      this.submitTips();
+                    }}
+                    ButtonText={'Submit'}
+                  />
                 </View>
               </View>
             </Modal>
+
+            {/* offline Alert Modal */}
 
             <Modal
               animationType="slide"
@@ -504,6 +656,42 @@ class HomeScreen extends Component {
                   <GreyButton
                     onPress={() => {
                       this.setState({IsOnline: false});
+                    }}
+                    ButtonText={'OK'}
+                  />
+                </View>
+              </View>
+            </Modal>
+
+            {/* Daily Email News Settler Success Modal  */}
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.newssettlerSuccess}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  backgroundColor: CustomColors.opacity07,
+                }}
+              >
+                <View style={HomeScreenStyles.registerModalCard}>
+                  <Text
+                    style={{
+                      alignSelf: 'flex-start',
+                      color: CustomColors.black,
+                      marginLeft: wp(-5),
+                      marginBottom: hp(2.5),
+                    }}
+                  >
+                    {Strings.newssettlerSucess}
+                  </Text>
+
+                  <GreyButton
+                    onPress={() => {
+                      this.setState({newssettlerSuccess: false});
                     }}
                     ButtonText={'OK'}
                   />

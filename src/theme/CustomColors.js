@@ -21,5 +21,6 @@ export const CustomColors = {
     opacity07:'rgba(0,0,0,0.7)',
     opacity08:'rgba(252,252,252,0.8)',
     lightGray4: '#A6A9B3',
-  
+    red :'#FF0000'
+
 };

@@ -26,13 +26,13 @@ export const HomeScreenStyles = StyleSheet.create({
   },
   tabTextStyle: {
     color: CustomColors.black,
-    fontSize: hp(1.8),
+    fontSize: hp(1.6),
     textAlign: 'center',
-    fontWeight:'bold'
+    fontWeight: 'bold',
   },
   footertabView: {
     width: wp(95),
-    height:hp(10),
+    height: hp(10),
     borderTopWidth: 1,
     borderColor: CustomColors.black,
     position: 'absolute',
@@ -101,5 +101,14 @@ export const HomeScreenStyles = StyleSheet.create({
     padding: hp(5),
     borderRadius: 10,
     backgroundColor: CustomColors.white,
+  },
+
+  //error text
+
+  errText: {
+    color: CustomColors.red,
+    alignSelf: 'flex-start',
+    marginLeft: wp(-5),
+    fontSize:hp(2)
   },
 });

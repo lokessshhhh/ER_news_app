@@ -25,11 +25,11 @@ class BreakingState extends Component {
       IsLoading: true,
       IsOnline: false,
     };
-  }
+  };
 
   componentDidMount() {
     this.getNetInfo();
-  }
+  };
 
   GetOnlineData = async () => {
     await axios

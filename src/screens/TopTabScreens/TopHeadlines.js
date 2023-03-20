@@ -34,8 +34,6 @@ const Tables = [
   'breakingStatewide',
 ];
 
-const Data = decode('Hello user! &#8222 !How are you');
-
 const requests = urls.map(url => axios.get(url));
 
 class TopHeadlines extends Component {
@@ -49,7 +47,6 @@ class TopHeadlines extends Component {
   }
 
   componentDidMount() {
-    console.log(Data, '=====alldata========');
     // dynamicLinks().onLink(this.handleDynamicLink());
     // // When the component is unmounted, remove the listener
     this.props.route.params

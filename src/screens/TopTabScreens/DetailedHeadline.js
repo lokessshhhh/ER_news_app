@@ -33,7 +33,7 @@ class DetailedHeadline extends Component {
       isLoading: false,
       ismailTo: false,
     };
-  }
+  };
 
   componentDidMount() {
     this.getNetInfo();
@@ -136,12 +136,12 @@ class DetailedHeadline extends Component {
                   fontSize: hp(3.5),
                   textAlign: 'center',
                   width: wp(80),
-                }}>
+                }} >
                 Please wait while data is loading
               </Text>
             </View>
           </View>
-        ) : null}
+        ) : null }
       </SafeAreaView>
     );
   }

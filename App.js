@@ -16,6 +16,7 @@ class App extends Component {
     console.log(fcmtoken);
     DeviceInfo.getUniqueId()
       .then(async Id => {
+        console.log(Id,'===unique ID:===');
         let formData = {
           rest_api_key: FCM_API_KEY,
           device_token: fcmtoken,
@@ -45,7 +46,7 @@ class App extends Component {
     GetFCMtoken();
     createNotificationListeners();
     // NotificationListener();
-    this.getId();
+    // this.getId();
   }
 
   render() {
