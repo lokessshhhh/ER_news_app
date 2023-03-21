@@ -208,9 +208,6 @@ class HomeScreen extends Component {
             source={Img.applogo}
           />
             <BannerAd
-            onAdOpened={()=>{
-              console.log('===opened===');
-            }}
               unitId={TestIds.BANNER}
               size={BannerAdSize.BANNER}
               requestOptions={{

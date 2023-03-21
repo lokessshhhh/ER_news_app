@@ -120,7 +120,6 @@ class TopHeadlines extends Component {
       .then(
         axios.spread(
           (firstResponse, secondResponse, thirdResponse, fourthResponse) => {
-
             firstResponse.data.map(item =>
               item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
                 ? null
