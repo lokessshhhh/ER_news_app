@@ -8,6 +8,15 @@ import {
 } from '../theme/layout';
 import {CustomColors} from '../theme/CustomColors';
 import { POSTER_INITIAL_ROUTE } from '../utils/Config';
+import {
+  AppOpenAd,
+  BannerAdSize,
+  InterstitialAd,
+  RewardedAd,
+  BannerAd,
+  TestIds,
+  GAMBannerAd,
+} from 'react-native-google-mobile-ads';
 
 const RenderLists = ({
   isHorizontalLine,
@@ -16,9 +25,12 @@ const RenderLists = ({
   onPressUrl,
   imgSource,
   textUrl,
+  isAd,
+  unitId
 }) => {
   return (
-    <View
+    <View style={{alignItems: 'center',}}>
+ <View
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -63,6 +75,25 @@ const RenderLists = ({
         />
       </TouchableOpacity>
     </View>
+      {
+        isAd ?
+        <View style={{marginVertical:hp(1.5)}}>
+        <BannerAd
+            onAdOpened={()=>{
+              console.log('===opened===');
+            }}
+
+              unitId={unitId}
+              size={BannerAdSize.BANNER}
+              requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+              }}
+            />
+            </View>
+            :null
+      }
+    </View>
+   
   );
 };
 

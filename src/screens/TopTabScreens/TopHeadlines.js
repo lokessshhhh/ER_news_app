@@ -11,12 +11,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../component/Loader';
 import NetInfo from '@react-native-community/netinfo';
 import Share from 'react-native-share';
-import {ApiBaseUrl, Deeplink} from '../../utils/Config';
+import {AdsIds, ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import {openDatabase} from 'react-native-sqlite-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {decode} from 'html-entities';
 import {htmlToText} from 'html-to-text';
+import SquareAd from '../../component/SquareAd';
+import { TestIds } from 'react-native-google-mobile-ads';
 
 const db = openDatabase({name: 'offlineMode'});
 
@@ -113,16 +115,6 @@ class TopHeadlines extends Component {
   };
 
   SaveAllDataOffline = async () => {
-    // const options = {
-    //   wordwrap: 60000,
-    //   // selectors: [
-    //   //   {selector: 'img', format: 'skip'},
-    //   //   // {selector: 'a.button', format: 'skip'},
-    //   // ],
-    // };
-
-    // text = htmlToText(responseData);
-
     await axios
       .all(requests)
       .then(
@@ -142,16 +134,15 @@ class TopHeadlines extends Component {
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
-                              console.log('== Data fetched successfully 1 ==');
                             }
                           },
                           error => {
-                            console.log(error, '==err==');
+                            console.log(error);
                           },
                         );
                       });
                     })
-                    .catch(err => console.error(err, '====promice err 1=====')),
+                    .catch(err => console.error(err)),
             );
             secondResponse.data.map(item =>
               item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
@@ -166,16 +157,15 @@ class TopHeadlines extends Component {
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
-                              console.log('== Data fetched successfully 2==');
                             }
                           },
                           error => {
-                            console.log(error, '==err==');
+                            console.log(error);
                           },
                         );
                       });
                     })
-                    .catch(err => console.log(err, '====promice err 2=====')),
+                    .catch(err => console.log(err)),
             );
             thirdResponse.data.map(item =>
               item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
@@ -190,16 +180,15 @@ class TopHeadlines extends Component {
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
-                              console.log('== Data fetched successfully 3==');
                             }
                           },
                           error => {
-                            console.log(error, '==err==');
+                            console.log(error);
                           },
                         );
                       });
                     })
-                    .catch(err => console.log(err, '====promice err 3=====')),
+                    .catch(err => console.log(err)),
             );
             fourthResponse.data.map(item =>
               item.acf.enter_url === '' || null || item.acf.enter_url.includes('mailto:')
@@ -214,16 +203,15 @@ class TopHeadlines extends Component {
                           (tx, results) => {
                             console.log('Results', results.rowsAffected);
                             if (results.rowsAffected > 0) {
-                              console.log('== Data fetched successfully 4==');
                             }
                           },
                           error => {
-                            console.log(error, '==err==');
+                            console.log(error);
                           },
                         );
                       });
                     })
-                    .catch(err => console.log(err, '====promice err 4=====')),
+                    .catch(err => console.log(err)),
             );
           },
         ),
@@ -310,10 +298,12 @@ class TopHeadlines extends Component {
                 scrollEnabled={false}
                 data={this.state.HeadlinesList}
                 keyExtractor={(item, index) => index}
-                renderItem={({item}) =>
+                renderItem={({item,index}) =>
                   this.state.HeadlinesList ? (
                     item.enter_url === '' || item.enter_url === null || item.enter_url.includes('mailto:') ? null : (
                       <RenderLists
+                        unitId={TestIds.BANNER}
+                        isAd={index === Math.round((this.state.HeadlinesList.length-1)/2) ? true : false}
                         imgSource={item.upload_image}
                         isHorizontalLine={
                           item.add_horizontal_line_below_the_news
@@ -335,6 +325,8 @@ class TopHeadlines extends Component {
               />
             )}
           </View>
+
+          <SquareAd unitId={AdsIds.BOTTOM_ADS} />
         </ScrollView>
       </View>
     );

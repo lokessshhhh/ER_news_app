@@ -11,13 +11,14 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../component/Loader';
 import NetInfo from '@react-native-community/netinfo';
-import {ApiBaseUrl, Deeplink} from '../../utils/Config';
+import {AdsIds, ApiBaseUrl, Deeplink} from '../../utils/Config';
 import RenderLists from '../../component/RenderLists';
 import Share from 'react-native-share';
 import {decode} from 'html-entities';
+import SquareAd from '../../component/SquareAd';
+import { TestIds } from 'react-native-google-mobile-ads';
 
 class BreakingState extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -25,11 +26,11 @@ class BreakingState extends Component {
       IsLoading: true,
       IsOnline: false,
     };
-  };
+  }
 
   componentDidMount() {
     this.getNetInfo();
-  };
+  }
 
   GetOnlineData = async () => {
     await axios
@@ -100,6 +101,10 @@ class BreakingState extends Component {
             style={[HomeScreenStyles.topHeadlineLogo]}
             source={Img.breaking}
           />
+
+          <SquareAd 
+          unitId={AdsIds.BREAKING_AA}
+           />
           <View style={{marginLeft: wp(2.5)}}>
             {this.state.IsLoading === true ? (
               <Loader />
@@ -108,10 +113,14 @@ class BreakingState extends Component {
                 scrollEnabled={false}
                 data={this.state.HeadlinesList}
                 keyExtractor={(item, index) => index}
-                renderItem={({item}) =>
+                renderItem={({item,index}) =>
                   this.state.HeadlinesList ? (
-                    item.enter_url === '' || item.enter_url === null || item.enter_url.includes('mailto:') ?  null : (
+                    item.enter_url === '' ||
+                    item.enter_url === null ||
+                    item.enter_url.includes('mailto:') ? null : (
                       <RenderLists
+                        unitId={TestIds.BANNER}
+                        isAd={index === Math.round((this.state.HeadlinesList.length-1)/2) ? true : false}
                         imgSource={item.upload_image}
                         isHorizontalLine={
                           item.add_horizontal_line_below_the_news
@@ -133,6 +142,7 @@ class BreakingState extends Component {
               />
             )}
           </View>
+          <SquareAd unitId={AdsIds.BOTTOM_ADS} />
         </ScrollView>
       </View>
     );

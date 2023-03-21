@@ -128,6 +128,9 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
+  - Google-Mobile-Ads-SDK (10.2.0):
+    - GoogleAppMeasurement (< 11.0, >= 7.0)
+    - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleAppMeasurement (10.5.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.5.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
@@ -152,6 +155,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUserMessagingPlatform (2.0.1)
   - GoogleUtilities (7.11.0):
     - GoogleUtilities/AppDelegateSwizzler (= 7.11.0)
     - GoogleUtilities/Environment (= 7.11.0)
@@ -564,6 +568,10 @@ PODS:
     - FirebaseCoreExtension (= 10.5.0)
     - React-Core
     - RNFBApp
+  - RNGoogleMobileAds (10.0.0):
+    - Google-Mobile-Ads-SDK (= 10.2.0)
+    - GoogleUserMessagingPlatform (= 2.0.1)
+    - React-Core
   - RNScreens (3.19.0):
     - React-Core
     - React-RCTImage
@@ -648,6 +656,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBDynamicLinks (from `../node_modules/@react-native-firebase/dynamic-links`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
+  - RNGoogleMobileAds (from `../node_modules/react-native-google-mobile-ads`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -673,8 +682,10 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
+    - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleDataTransport
+    - GoogleUserMessagingPlatform
     - GoogleUtilities
     - libevent
     - nanopb
@@ -772,6 +783,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/dynamic-links"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
+  RNGoogleMobileAds:
+    :path: "../node_modules/react-native-google-mobile-ads"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNShare:
@@ -804,8 +817,10 @@ SPEC CHECKSUMS:
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  Google-Mobile-Ads-SDK: 4cf7100c99e7cfdd97dd9193cc26a13411aa6891
   GoogleAppMeasurement: 40c70a7d89013f0eca72006c4b9732163ea4cdae
   GoogleDataTransport: ea169759df570f4e37bdee1623ec32a7e64e67c4
+  GoogleUserMessagingPlatform: 5f8b30daf181805317b6b985bb51c1ff3beca054
   GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
   hermes-engine: a1f157c49ea579c28b0296bda8530e980c45bdb3
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -850,6 +865,7 @@ SPEC CHECKSUMS:
   RNFBApp: 13ca8ba0feba98d4bac2057884894dcf8eedf97f
   RNFBDynamicLinks: 429764c6f5390b50e98d8df1733c787e34b2a3ee
   RNFBMessaging: 0bdc8269fefad36f6820d6fc89b0bcae3f705891
+  RNGoogleMobileAds: ad80332cdfcdc83bdca4a3659c667ffbbbcb73d6
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNShare: b089c33619bbfb0a32bc4069c858b9274e694187
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608

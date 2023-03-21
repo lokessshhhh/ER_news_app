@@ -1,5 +1,9 @@
 {
   "name": "EmpireReport",
-  "displayName": "EmpireReport"
+  "displayName": "EmpireReport",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-8537916137184145~9478941139",
+    "ios_app_id": "ca-app-pub-8537916137184145~1708084716"
+  }
   
 }

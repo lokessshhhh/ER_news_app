@@ -4,6 +4,7 @@ nameAlert:'Please Enter Name',
 fnameAlert:'Please Enter Firstname',
 lnameAlert:'Please Enter Lastname',
 emailAlert:'Please Enter Email',
+validEAlert:'Please Enter Valid Email',
 msgAlert:'Please Enter Your Message',
 newssettlerSucess:'YOU HAVE BEEN ADDED TO THE EXCLUSIVE EMPIRE REPORT NY E-MAIL LIST...'
 };

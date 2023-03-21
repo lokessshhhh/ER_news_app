@@ -12,9 +12,18 @@ import RenderLists from '../../component/RenderLists';
 import Loader from '../../component/Loader';
 import NetInfo from '@react-native-community/netinfo';
 import Share from 'react-native-share';
-import {ApiBaseUrl, Deeplink} from '../../utils/Config';
+import {AdsIds, ApiBaseUrl, Deeplink} from '../../utils/Config';
 import {decode} from 'html-entities';
-
+import {
+  AppOpenAd,
+  BannerAdSize,
+  InterstitialAd,
+  RewardedAd,
+  BannerAd,
+  TestIds,
+  GAMBannerAd,
+} from 'react-native-google-mobile-ads';
+import SquareAd from '../../component/SquareAd';
 
 class NyState extends Component {
   constructor(props) {
@@ -102,6 +111,8 @@ class NyState extends Component {
             ]}
             source={Img.nystate}
           />
+            <SquareAd unitId={AdsIds.NY_STATE_AA} />
+
           <View style={{marginLeft: wp(2.5)}}>
             {this.state.IsLoading === true ? (
               <Loader />
@@ -110,10 +121,14 @@ class NyState extends Component {
                 scrollEnabled={false}
                 data={this.state.HeadlinesList}
                 keyExtractor={(item, index) => index}
-                renderItem={({item}) =>
+                renderItem={({item,index}) =>
                   this.state.HeadlinesList ? (
-                    item.enter_url === '' || item.enter_url === null || item.enter_url.includes('mailto:') ?  null : (
+                    item.enter_url === '' ||
+                    item.enter_url === null ||
+                    item.enter_url.includes('mailto:') ? null : (
                       <RenderLists
+                      unitId={TestIds.BANNER}
+                      isAd={index === Math.round((this.state.HeadlinesList.length-1)/2) ? true : false}
                         imgSource={item.upload_image}
                         isHorizontalLine={
                           item.add_horizontal_line_below_the_news
@@ -132,9 +147,10 @@ class NyState extends Component {
                     )
                   ) : null
                 }
-              />
+              /> 
             )}
           </View>
+          <SquareAd unitId={AdsIds.BOTTOM_ADS} />
         </ScrollView>
       </View>
     );

@@ -26,13 +26,21 @@ import GreyInput from '../../component/GreyInput';
 import GreyButton from '../../component/GreyButton';
 import NetInfo from '@react-native-community/netinfo';
 import {Strings} from '../../theme/Strings';
-import {ApiBaseUrl, SUBMIT_TIPS_URL} from '../../utils/Config';
+import {AdsIds, ApiBaseUrl, SUBMIT_TIPS_URL} from '../../utils/Config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TopHeadlines from '../TopTabScreens/TopHeadlines';
 import {openDatabase} from 'react-native-sqlite-storage';
 import {decode} from 'html-entities';
-import MailchimpSubscribe from "react-mailchimp-subscribe";
+import {
+  AppOpenAd,
+  BannerAdSize,
+  InterstitialAd,
+  RewardedAd,
+  BannerAd,
+  TestIds,
+  GAMBannerAd,
+} from 'react-native-google-mobile-ads';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -75,24 +83,8 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     this.getNetInfo();
-    this.CustomForm();
-  };
-
-   CustomForm = () => {
-    <MailchimpSubscribe
-      url={ApiBaseUrl}
-      render={({ subscribe, status, message }) => (
-        console.log(subscribe,'===='),
-        <div>
-          <CustomForm onSubmitted={formData => subscribe(formData)} />
-          {status === "sending" && <div style={{ color: "blue" }}>sending...</div>}
-          {status === "error" && <div style={{ color: "red" }} dangerouslySetInnerHTML={{__html: message}}/>}
-          {status === "success" && <div style={{ color: "green" }}>Subscribed !</div>}
-        </div>
-      )}
-    />
   }
-
+ 
   InitialiseDB = () => {
     db.transaction(txn => {
       txn.executeSql(
@@ -171,11 +163,14 @@ class HomeScreen extends Component {
   submitTips = () => {
     this.state.name === '' ||
     this.state.email === '' ||
-    this.state.message === ''
+    this.state.message === ''||
+    reg.test(this.state.email) === false
       ? this.setState({
           notValid: true,
         })
-      : (Linking.openURL(`${SUBMIT_TIPS_URL}${this.state.message} ${this.state.name}`),
+      : (Linking.openURL(
+          `${SUBMIT_TIPS_URL}${this.state.message} ${this.state.name}`,
+        ),
         this.setState({
           SubmitTips: false,
           name: '',
@@ -188,7 +183,8 @@ class HomeScreen extends Component {
   setNewssettler = () => {
     this.state.fname === '' ||
     this.state.lname === '' ||
-    this.state.uemail === ''
+    this.state.uemail === '' ||
+    reg.test(this.state.uemail) === false
       ? this.setState({
           notValid: true,
         })
@@ -198,6 +194,7 @@ class HomeScreen extends Component {
           uemail: '',
           newssettlerSuccess: true,
           NewsSettler: false,
+          notValid:false
         });
   };
 
@@ -210,11 +207,16 @@ class HomeScreen extends Component {
             style={HomeScreenStyles.mainlogo}
             source={Img.applogo}
           />
-          <Image
-            resizeMode="contain"
-            style={HomeScreenStyles.mainlogo}
-            source={Img.adlogo}
-          />
+            <BannerAd
+            onAdOpened={()=>{
+              console.log('===opened===');
+            }}
+              unitId={TestIds.BANNER}
+              size={BannerAdSize.BANNER}
+              requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+              }}
+            />
         </View>
 
         {this.state.IsIndex === 0 ||
@@ -522,11 +524,17 @@ class HomeScreen extends Component {
                     value={this.state.uemail}
                     placeholder={'Your Email Address'}
                   />
-                  {this.state.notValid && this.state.uemail === '' ? (
+                  {this.state.notValid && this.state.uemail === '' ? 
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.emailAlert}
                     </Text>
-                  ) : null}
+                   : reg.test(this.state.uemail) === false && this.state.notValid ?
+                  ( 
+                    <Text style={HomeScreenStyles.errText}>
+                      {Strings.validEAlert}
+                    </Text>)
+                  :
+                  null}
                   <GreyButton
                     onPress={() => {
                       this.setNewssettler();
@@ -600,9 +608,16 @@ class HomeScreen extends Component {
                   />
                   {this.state.notValid && this.state.email === '' ? (
                     <Text style={HomeScreenStyles.errText}>
-                      { Strings.emailAlert}
+                      {Strings.emailAlert}
                     </Text>
-                  ) : null}
+                  ) : 
+                  reg.test(this.state.email) === false && this.state.notValid ?
+                  ( 
+                    <Text style={HomeScreenStyles.errText}>
+                      {Strings.validEAlert}
+                    </Text>)
+                  :
+                  null}
                   <GreyInput
                     value={this.state.message}
                     onChangeText={value =>
@@ -616,7 +631,8 @@ class HomeScreen extends Component {
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.msgAlert}
                     </Text>
-                  ) : null}
+                  ) : 
+                  null}
                   <GreyButton
                     onPress={() => {
                       this.submitTips();
