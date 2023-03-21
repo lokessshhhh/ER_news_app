@@ -1,4 +1,3 @@
-
 export const BASE_URL = 'http://104.152.168.42/~healthca/staging-empire-reportny';
 export const ApiBaseUrl = `${BASE_URL}/wp-json/wp/v2/`;
 export const Deeplink = 'https://empirereportapp.page.link/screens/';
@@ -7,10 +6,11 @@ export const WP_JSON_URL = `${BASE_URL}/wp-json/`;
 export const POSTER_INITIAL_ROUTE = `${BASE_URL}/?p=`;
 export const AdsMainId = "ca-app-pub-8537916137184145/";
 export const AdsIds = {
-BOTTOM_ADS:`${AdsMainId}4641842577`,
-TOP_ADS:`${AdsMainId}1880309258`,
-GENERAL_SIDEBAR:`${AdsMainId}8549297992`,
-NY_STATE_AA:`${AdsMainId}2022847279`,
-BREAKING_AA:`${AdsMainId}9804585631`,
-NYC_LONG_AA:`${AdsMainId}6365987788`,
+  BOTTOM_ADS: `${AdsMainId}4641842577`,
+  TOP_ADS: `${AdsMainId}1880309258`,
+  GENERAL_SIDEBAR: `${AdsMainId}8549297992`,
+  NY_STATE_AA: `${AdsMainId}2022847279`,
+  BREAKING_AA: `${AdsMainId}9804585631`,
+  NYC_LONG_AA: `${AdsMainId}6365987788`,
 };
+export const MAILCHIMP_API_KEY = 'f28edbe9cbe40981081547e5ced1b5e7-us14';
