@@ -26,7 +26,12 @@ import GreyInput from '../../component/GreyInput';
 import GreyButton from '../../component/GreyButton';
 import NetInfo from '@react-native-community/netinfo';
 import {Strings} from '../../theme/Strings';
-import {AdsIds, ApiBaseUrl, SUBMIT_TIPS_URL} from '../../utils/Config';
+import {
+  AdsIds,
+  ApiBaseUrl,
+  MAILCHIMP_API_KEY,
+  SUBMIT_TIPS_URL,
+} from '../../utils/Config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TopHeadlines from '../TopTabScreens/TopHeadlines';
@@ -41,6 +46,7 @@ import {
   TestIds,
   GAMBannerAd,
 } from 'react-native-google-mobile-ads';
+import {decode as atob, encode as btoa} from 'base-64';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -70,11 +76,12 @@ class HomeScreen extends Component {
       newssettlerSuccess: false,
       IsOnline: false,
       IsLoading: false,
+      notValid: false,
+      correctNewsletter: false,
       HeadlinesList: [],
       message: '',
       name: '',
       email: '',
-      notValid: false,
       fname: '',
       lname: '',
       uemail: '',
@@ -84,7 +91,7 @@ class HomeScreen extends Component {
   componentDidMount() {
     this.getNetInfo();
   }
- 
+
   InitialiseDB = () => {
     db.transaction(txn => {
       txn.executeSql(
@@ -163,13 +170,13 @@ class HomeScreen extends Component {
   submitTips = () => {
     this.state.name === '' ||
     this.state.email === '' ||
-    this.state.message === ''||
+    this.state.message === '' ||
     reg.test(this.state.email) === false
       ? this.setState({
           notValid: true,
         })
       : (Linking.openURL(
-          `${SUBMIT_TIPS_URL}${this.state.message} ${this.state.name}`,
+          `${SUBMIT_TIPS_URL}message: ${this.state.message},\nname: ${this.state.name},\nemail: ${this.state.email}`,
         ),
         this.setState({
           SubmitTips: false,
@@ -180,7 +187,12 @@ class HomeScreen extends Component {
         }));
   };
 
-  setNewssettler = () => {
+  setNewssettler = async () => {
+    const apiKey = MAILCHIMP_API_KEY;
+    const dataCenter = apiKey.split('-')[1];
+    const listId = '1b13b17144';
+    const url = `https://${dataCenter}.api.mailchimp.com/3.0/lists/${listId}/members`;
+
     this.state.fname === '' ||
     this.state.lname === '' ||
     this.state.uemail === '' ||
@@ -188,14 +200,45 @@ class HomeScreen extends Component {
       ? this.setState({
           notValid: true,
         })
-      : this.setState({
+      : (this.setState({
           fname: '',
-          lemail: '',
+          lname: '',
           uemail: '',
           newssettlerSuccess: true,
           NewsSettler: false,
-          notValid:false
-        });
+          notValid: false,
+        }),
+        await axios
+          .post(
+            url,
+            {
+              email_address: this.state.uemail,
+              status: 'subscribed',
+              merge_fields: {
+                FNAME: this.state.fname,
+                LNAME: this.state.lname,
+              },
+            },
+            {
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `Basic ${btoa(`apikey:${apiKey}`)}`,
+              },
+            },
+          )
+          .then(response => {
+            console.log(response.data, '===mailchimp res====');
+            this.setState({
+              correctNewsletter: false,
+            });
+          })
+          .catch(err => {
+            console.log(err.response.data, '===mailchimp err===');
+            this.setState({
+              correctNewsletter: true,
+            });
+          }));
   };
 
   render() {
@@ -207,13 +250,13 @@ class HomeScreen extends Component {
             style={HomeScreenStyles.mainlogo}
             source={Img.applogo}
           />
-            <BannerAd
-              unitId={TestIds.BANNER}
-              size={BannerAdSize.BANNER}
-              requestOptions={{
-                requestNonPersonalizedAdsOnly: true,
-              }}
-            />
+          <BannerAd
+            unitId={TestIds.BANNER}
+            size={BannerAdSize.BANNER}
+            requestOptions={{
+              requestNonPersonalizedAdsOnly: true,
+            }}
+          />
         </View>
 
         {this.state.IsIndex === 0 ||
@@ -521,17 +564,16 @@ class HomeScreen extends Component {
                     value={this.state.uemail}
                     placeholder={'Your Email Address'}
                   />
-                  {this.state.notValid && this.state.uemail === '' ? 
+                  {this.state.notValid && this.state.uemail === '' ? (
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.emailAlert}
                     </Text>
-                   : reg.test(this.state.uemail) === false && this.state.notValid ?
-                  ( 
+                  ) : reg.test(this.state.uemail) === false &&
+                    this.state.notValid ? (
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.validEAlert}
-                    </Text>)
-                  :
-                  null}
+                    </Text>
+                  ) : null}
                   <GreyButton
                     onPress={() => {
                       this.setNewssettler();
@@ -607,14 +649,12 @@ class HomeScreen extends Component {
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.emailAlert}
                     </Text>
-                  ) : 
-                  reg.test(this.state.email) === false && this.state.notValid ?
-                  ( 
+                  ) : reg.test(this.state.email) === false &&
+                    this.state.notValid ? (
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.validEAlert}
-                    </Text>)
-                  :
-                  null}
+                    </Text>
+                  ) : null}
                   <GreyInput
                     value={this.state.message}
                     onChangeText={value =>
@@ -628,8 +668,7 @@ class HomeScreen extends Component {
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.msgAlert}
                     </Text>
-                  ) : 
-                  null}
+                  ) : null}
                   <GreyButton
                     onPress={() => {
                       this.submitTips();
@@ -699,7 +738,9 @@ class HomeScreen extends Component {
                       marginBottom: hp(2.5),
                     }}
                   >
-                    {Strings.newssettlerSucess}
+                    {this.state.correctNewsletter
+                      ? Strings.errAlert
+                      : Strings.newssettlerSucess}
                   </Text>
 
                   <GreyButton

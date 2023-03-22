@@ -112,11 +112,25 @@ class DetailedHeadline extends Component {
         />
         {!this.state.isOnline ? (
           <ScrollView>
-            <Text style={{fontSize: hp(2.5), color: CustomColors.black, margin: hp(2)}}>
+            <Text 
+             
+            style={{fontSize: hp(2.5), color: CustomColors.black, margin: hp(2)}}>
               {this.state.htmlTags}
             </Text>
           </ScrollView>
-        ) : (
+        ) : 
+        this.state.htmlTags === "" && !this.state.isOnline ?
+        <Text
+        style={{
+          fontSize: hp(3.5),
+          textAlign: 'center',
+          width: wp(80),
+          color: CustomColors.black
+        }} >
+        No Data To Display
+      </Text>
+      :
+        (
           <WebView
             onLoadEnd={() => {
               this.setState({

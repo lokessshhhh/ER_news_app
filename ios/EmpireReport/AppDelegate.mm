@@ -20,10 +20,6 @@
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;  
 
-  // [RNSplashScreen show];
-  
-  // self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
