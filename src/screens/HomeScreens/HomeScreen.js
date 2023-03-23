@@ -251,7 +251,7 @@ class HomeScreen extends Component {
             source={Img.applogo}
           />
           <BannerAd
-            unitId={TestIds.BANNER}
+            unitId={AdsIds.TOP_ADS}
             size={BannerAdSize.BANNER}
             requestOptions={{
               requestNonPersonalizedAdsOnly: true,
