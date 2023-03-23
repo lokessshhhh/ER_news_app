@@ -10,6 +10,7 @@ export const AdsIds = {
   BOTTOM_ADS: `${AdsMainId}4641842577`,
   TOP_ADS: `${AdsMainId}1880309258`,
   GENERAL_SIDEBAR: `${AdsMainId}8549297992`,
+  TOP_HEADLINES_AA: `${AdsMainId}6686164363`,
   NY_STATE_AA: `${AdsMainId}2022847279`,
   BREAKING_AA: `${AdsMainId}9804585631`,
   NYC_LONG_AA: `${AdsMainId}6365987788`,

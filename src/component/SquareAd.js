@@ -20,7 +20,7 @@ const SquareAd = ({unitId}) => {
     return (
         <View style={{alignSelf:'center',marginVertical:hp(1.5)}}>
           <BannerAd
-              unitId={TestIds.BANNER}
+              unitId={unitId}
               size={BannerAdSize.MEDIUM_RECTANGLE}
               requestOptions={{
                 requestNonPersonalizedAdsOnly: true,

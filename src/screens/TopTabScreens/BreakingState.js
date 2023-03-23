@@ -102,7 +102,7 @@ class BreakingState extends Component {
             source={Img.breaking}
           />
 
-          <SquareAd 
+          <SquareAd
           unitId={AdsIds.BREAKING_AA}
            />
           <View style={{marginLeft: wp(2.5)}}>
@@ -119,7 +119,7 @@ class BreakingState extends Component {
                     item.enter_url === null ||
                     item.enter_url.includes('mailto:') ? null : (
                       <RenderLists
-                        unitId={TestIds.BANNER}
+                        unitId={AdsIds.GENERAL_SIDEBAR}
                         isAd={index === Math.round((this.state.HeadlinesList.length-1)/2) ? true : false}
                         imgSource={item.upload_image}
                         isHorizontalLine={
