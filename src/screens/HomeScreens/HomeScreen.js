@@ -739,8 +739,8 @@ class HomeScreen extends Component {
                     }}
                   >
                     {this.state.correctNewsletter
-                      ? Strings.errAlert
-                      : Strings.newssettlerSucess}
+                      ? Strings.newsLetterErrorMessage
+                      : Strings.newsLetterSuccessMessage}
                   </Text>
 
                   <GreyButton

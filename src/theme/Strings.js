@@ -6,6 +6,6 @@ lnameAlert:'Please Enter Lastname',
 emailAlert:'Please Enter Email',
 validEAlert:'Please Enter Valid Email',
 msgAlert:'Please Enter Your Message',
-newssettlerSucess:'YOU HAVE BEEN ADDED TO THE EXCLUSIVE EMPIRE REPORT NY E-MAIL LIST...',
-errAlert:'Something Went Wrong',
+newsLetterSuccessMessage:'YOU HAVE BEEN ADDED TO THE EXCLUSIVE EMPIRE REPORT NY E-MAIL LIST...',
+newsLetterErrorMessage:'Oops, something went wrong. You might be in the mailing list already.',
 };
