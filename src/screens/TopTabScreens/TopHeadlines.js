@@ -325,7 +325,6 @@ class TopHeadlines extends Component {
               />
             )}
           </View>
-
           <SquareAd unitId={AdsIds.BOTTOM_ADS} />
         </ScrollView>
       </View>

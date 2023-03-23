@@ -31,6 +31,7 @@ import {
   ApiBaseUrl,
   MAILCHIMP_API_KEY,
   SUBMIT_TIPS_URL,
+  tipsMail,
 } from '../../utils/Config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -40,13 +41,11 @@ import {decode} from 'html-entities';
 import {
   AppOpenAd,
   BannerAdSize,
-  InterstitialAd,
-  RewardedAd,
   BannerAd,
-  TestIds,
-  GAMBannerAd,
 } from 'react-native-google-mobile-ads';
 import {decode as atob, encode as btoa} from 'base-64';
+import { openComposer } from "react-native-email-link";
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -81,7 +80,6 @@ class HomeScreen extends Component {
       HeadlinesList: [],
       message: '',
       name: '',
-      email: '',
       fname: '',
       lname: '',
       uemail: '',
@@ -91,6 +89,81 @@ class HomeScreen extends Component {
   componentDidMount() {
     this.getNetInfo();
   }
+
+  RenderOGContent = () => {
+    return (
+      <ScrollView
+        style={{flex: 1}}
+        contentContainerStyle={{alignItems: 'center'}}
+      >
+        {this.state.HeadlinesList.map((item, index) => (
+          <View
+            key={index}
+            style={{
+              width: wp(90),
+              padding: wp(2.5),
+              marginVertical: hp(2.5),
+              backgroundColor: CustomColors.cardbg,
+            }}
+          >
+            <View style={{marginLeft: wp(2.5)}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('OriginalContent', {
+                    link: item.link,
+                    html: item.content.rendered,
+                  });
+                }}
+              >
+                <Text
+                  style={{
+                    color: CustomColors.black,
+                    fontSize: hp(2.5),
+                    textDecorationLine: 'underline',
+                  }}
+                >
+                  {decode(item.title.rendered)}
+                </Text>
+              </TouchableOpacity>
+              <Text
+                numberOfLines={3}
+                style={{
+                  color: CustomColors.black,
+                  fontSize: hp(2),
+                  marginVertical: hp(1),
+                }}
+              >
+                {decode(item.excerpt.rendered).replace(/<[^>]+>/g, '')}
+                {'...'}
+              </Text>
+
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text
+                  style={{
+                    color: CustomColors.cardtext,
+                    fontSize: hp(2),
+                  }}
+                >
+                  By{' '}
+                </Text>
+
+                <Text
+                  style={{
+                    color: CustomColors.cardtext,
+                    fontSize: hp(2),
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {item._embedded.author[0].name} |{' '}
+                  {moment(item.date).format('MMMM DD, YYYY')}
+                </Text>
+              </View>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    );
+  };
 
   InitialiseDB = () => {
     db.transaction(txn => {
@@ -168,23 +241,25 @@ class HomeScreen extends Component {
   };
 
   submitTips = () => {
-    this.state.name === '' ||
-    this.state.email === '' ||
-    this.state.message === '' ||
-    reg.test(this.state.email) === false
+    this.state.name === '' || this.state.message === ''
       ? this.setState({
           notValid: true,
         })
-      : (Linking.openURL(
-          `${SUBMIT_TIPS_URL}message: ${this.state.message},\nname: ${this.state.name},\nemail: ${this.state.email}`,
-        ),
+      : 
+      openComposer({
+        to:tipsMail,
+        subject: "NEWS TIPS TO EMPIRE REPORT",
+        body: `message: ${this.state.message},\nname: ${this.state.name}`,
+      }).then(()=>{
         this.setState({
-          SubmitTips: false,
           name: '',
-          email: '',
           message: '',
-          notValid: false,
-        }));
+        })
+      })
+      .catch((err)=>{
+        alert('No access for this platform')
+      })
+
   };
 
   setNewssettler = async () => {
@@ -259,195 +334,167 @@ class HomeScreen extends Component {
           />
         </View>
 
-        {this.state.IsIndex === 0 ||
-        this.state.IsIndex === 1 ||
-        this.state.IsIndex === 2 ? (
-          <ScrollView
-            style={{flex: 1, marginTop: hp(2.5), marginBottom: hp(10)}}
-            contentContainerStyle={{alignItems: 'center'}}
+        <View style={{flex: 1, marginBottom: hp(10)}}>
+          <Tab.Navigator
+            screenOptions={{
+              swipeEnabled: this.state.IsIndex === 0 ? false : true,
+              tabBarPressColor: 'transparent',
+              tabBarStyle: {
+                backgroundColor: 'transparent',
+                elevation: 0,
+                shadowOffset: {
+                  width: 0,
+                  height: 0,
+                },
+                marginHorizontal: wp(2.5),
+                borderBottomWidth: 1,
+                borderColor: CustomColors.black,
+              },
+              tabBarItemStyle: {
+                paddingTop: 20,
+              },
+              tabBarIndicatorStyle: {
+                backgroundColor: 'transparent',
+                elevation: 0,
+              },
+            }}
           >
-            {this.state.HeadlinesList.map((item, index) => (
-              <View
-                key={index}
-                style={{
-                  width: wp(90),
-                  padding: wp(2.5),
-                  marginVertical: hp(2.5),
-                  backgroundColor: CustomColors.cardbg,
-                }}
-              >
-                <View style={{marginLeft: wp(2.5)}}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate('OriginalContent', {
-                        link: item.link,
-                        html: item.content.rendered,
-                      });
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: CustomColors.black,
-                        fontSize: hp(2.5),
-                        textDecorationLine: 'underline',
-                      }}
-                    >
-                      {decode(item.title.rendered)}
-                    </Text>
-                  </TouchableOpacity>
-                  <Text
-                    numberOfLines={3}
-                    style={{
-                      color: CustomColors.black,
-                      fontSize: hp(2),
-                      marginVertical: hp(1),
-                    }}
-                  >
-                    {decode(item.excerpt.rendered).replace(/<[^>]+>/g, '')}
-                    {'...'}
-                  </Text>
-
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text
-                      style={{
-                        color: CustomColors.cardtext,
-                        fontSize: hp(2),
-                      }}
-                    >
-                      By{' '}
-                    </Text>
-
-                    <Text
-                      style={{
-                        color: CustomColors.cardtext,
-                        fontSize: hp(2),
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {item._embedded.author[0].name} |{' '}
-                      {moment(item.date).format('MMMM DD, YYYY')}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
-        ) : (
-          <View style={{flex: 1, marginBottom: hp(10)}}>
-            <Tab.Navigator
-              screenOptions={{
-                tabBarPressColor: 'transparent',
-                tabBarStyle: {
-                  backgroundColor: 'transparent',
-                  elevation: 0,
-                  shadowOffset: {
-                    width: 0,
-                    height: 0,
-                  },
-                  marginHorizontal: wp(2.5),
-                  borderBottomWidth: 1,
-                  borderColor: CustomColors.black,
-                },
-                tabBarItemStyle: {
-                  paddingTop: 20,
-                },
-                tabBarIndicatorStyle: {
-                  backgroundColor: 'transparent',
-                  elevation: 0,
+            <Tab.Screen
+              listeners={{
+                tabPress: e => {
+                  this.setState({
+                    IsIndex: null,
+                  });
                 },
               }}
-            >
-              <Tab.Screen
-                name="TopHeadlines"
-                component={TopHeadlines}
-                options={{
-                  tabBarLabel: ({focused}) => (
-                    <View
-                      style={[
-                        HomeScreenStyles.toptanView,
-                        {
-                          backgroundColor: focused
+              name="TopHeadlines"
+              component={
+                this.state.IsIndex === 0 ? this.RenderOGContent : TopHeadlines
+              }
+              options={{
+                tabBarLabel: ({focused}) => (
+                  <View
+                    style={[
+                      HomeScreenStyles.toptanView,
+                      {
+                        backgroundColor:
+                          this.state.IsIndex === 0
+                            ? CustomColors.white
+                            : focused
                             ? CustomColors.tabmainBG
                             : CustomColors.white,
-                        },
-                      ]}
-                    >
-                      <Text style={HomeScreenStyles.tabTextStyle}>
-                        TOP HEADLINES
-                      </Text>
-                    </View>
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="FeedScreen"
-                component={NyState}
-                options={{
-                  tabBarLabel: ({focused}) => (
-                    <View
-                      style={[
-                        HomeScreenStyles.toptanView,
-                        {
-                          backgroundColor: focused
+                      },
+                    ]}
+                  >
+                    <Text style={HomeScreenStyles.tabTextStyle}>
+                      TOP HEADLINES
+                    </Text>
+                  </View>
+                ),
+              }}
+            />
+            <Tab.Screen
+              listeners={{
+                tabPress: e => {
+                  this.setState({
+                    IsIndex: null,
+                  });
+                },
+              }}
+              name="FeedScreen"
+              component={
+                this.state.IsIndex === 0 ? this.RenderOGContent : NyState
+              }
+              options={{
+                tabBarLabel: ({focused}) => (
+                  <View
+                    style={[
+                      HomeScreenStyles.toptanView,
+                      {
+                        backgroundColor:
+                          this.state.IsIndex === 0
+                            ? CustomColors.white
+                            : focused
                             ? CustomColors.tabmainBG
                             : CustomColors.white,
-                        },
-                      ]}
-                    >
-                      <Text style={HomeScreenStyles.tabTextStyle}>
-                        NY STATE
-                      </Text>
-                    </View>
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="FavScreen"
-                component={NycLongIsland}
-                options={{
-                  tabBarLabel: ({focused}) => (
-                    <View
-                      style={[
-                        HomeScreenStyles.toptanView,
-                        {
-                          backgroundColor: focused
+                      },
+                    ]}
+                  >
+                    <Text style={HomeScreenStyles.tabTextStyle}>NY STATE</Text>
+                  </View>
+                ),
+              }}
+            />
+            <Tab.Screen
+              listeners={{
+                tabPress: e => {
+                  this.setState({
+                    IsIndex: null,
+                  });
+                },
+              }}
+              name="FavScreen"
+              component={
+                this.state.IsIndex === 0 ? this.RenderOGContent : NycLongIsland
+              }
+              options={{
+                tabBarLabel: ({focused}) => (
+                  <View
+                    style={[
+                      HomeScreenStyles.toptanView,
+                      {
+                        backgroundColor:
+                          this.state.IsIndex === 0
+                            ? CustomColors.white
+                            : focused
                             ? CustomColors.tabmainBG
                             : CustomColors.white,
-                        },
-                      ]}
-                    >
-                      <Text style={HomeScreenStyles.tabTextStyle}>
-                        NYC/LONG ISLAND
-                      </Text>
-                    </View>
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="ProfileScreen"
-                component={BreakingState}
-                options={{
-                  tabBarLabel: ({focused}) => (
-                    <View
-                      style={[
-                        HomeScreenStyles.toptanView,
-                        {
-                          backgroundColor: focused
+                      },
+                    ]}
+                  >
+                    <Text style={HomeScreenStyles.tabTextStyle}>
+                      NYC/LONG ISLAND
+                    </Text>
+                  </View>
+                ),
+              }}
+            />
+            <Tab.Screen
+              listeners={{
+                tabPress: e => {
+                  this.setState({
+                    IsIndex: null,
+                  });
+                },
+              }}
+              name="ProfileScreen"
+              component={
+                this.state.IsIndex === 0 ? this.RenderOGContent : BreakingState
+              }
+              options={{
+                tabBarLabel: ({focused}) => (
+                  <View
+                    style={[
+                      HomeScreenStyles.toptanView,
+                      {
+                        backgroundColor:
+                          this.state.IsIndex === 0
+                            ? CustomColors.white
+                            : focused
                             ? CustomColors.tabmainBG
                             : CustomColors.white,
-                        },
-                      ]}
-                    >
-                      <Text style={HomeScreenStyles.tabTextStyle}>
-                        BREAKING STATEWIDE
-                      </Text>
-                    </View>
-                  ),
-                }}
-              />
-            </Tab.Navigator>
-          </View>
-        )}
+                      },
+                    ]}
+                  >
+                    <Text style={HomeScreenStyles.tabTextStyle}>
+                      BREAKING STATEWIDE
+                    </Text>
+                  </View>
+                ),
+              }}
+            />
+          </Tab.Navigator>
+        </View>
 
         <View style={HomeScreenStyles.footertabView}>
           {FooterButtonArray.map((item, index) => (
@@ -489,6 +536,8 @@ class HomeScreen extends Component {
             </TouchableOpacity>
           ))}
           <View>
+
+
             {/* Email NewsSettler Modal */}
 
             <Modal
@@ -634,25 +683,6 @@ class HomeScreen extends Component {
                   {this.state.notValid && this.state.name === '' ? (
                     <Text style={HomeScreenStyles.errText}>
                       {Strings.nameAlert}
-                    </Text>
-                  ) : null}
-                  <GreyInput
-                    value={this.state.email}
-                    onChangeText={value =>
-                      this.setState({
-                        email: value,
-                      })
-                    }
-                    placeholder={'Email'}
-                  />
-                  {this.state.notValid && this.state.email === '' ? (
-                    <Text style={HomeScreenStyles.errText}>
-                      {Strings.emailAlert}
-                    </Text>
-                  ) : reg.test(this.state.email) === false &&
-                    this.state.notValid ? (
-                    <Text style={HomeScreenStyles.errText}>
-                      {Strings.validEAlert}
                     </Text>
                   ) : null}
                   <GreyInput

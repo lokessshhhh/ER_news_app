@@ -45,6 +45,8 @@ const RenderLists = ({
           paddingRight: wp(2.5),
         }}
       >
+        <TouchableOpacity onPress={onPressUrl}>
+
         {isUploadImg === '' || isUploadImg === null ? null : (
           <Image
             resizeMode="contain"
@@ -54,7 +56,6 @@ const RenderLists = ({
             }}
           />
         )}
-        <TouchableOpacity onPress={onPressUrl}>
           <Text
             style={{
               color: CustomColors.black,

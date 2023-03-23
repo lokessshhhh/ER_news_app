@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 export const BASE_URL = 'https://empirereportnewyork.com';
 export const ApiBaseUrl = `${BASE_URL}/wp-json/wp/v2/`;
 export const Deeplink = 'https://empirereportapp.page.link/screens/';
@@ -5,7 +7,7 @@ export const FCM_API_KEY = '8p24q2315p_0s19q1000-6q3n77psn690ss674159rpqr-675n02
 export const WP_JSON_URL = `${BASE_URL}/wp-json/`;
 export const POSTER_INITIAL_ROUTE = `${BASE_URL}/?p=`;
 export const AdsMainId = "ca-app-pub-8537916137184145/";
-export const SUBMIT_TIPS_URL = "mailto:info@empirereportnewyork.com?subject=NEWS TIPS TO EMPIRE REPORT&body=";
+export const tipsMail='info@empirereportnewyork.com';
 export const AdsIds = {
   BOTTOM_ADS: `${AdsMainId}4641842577`,
   TOP_ADS: `${AdsMainId}1880309258`,
